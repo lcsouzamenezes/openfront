@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import {
   checkbox,
   integer,
@@ -10,6 +11,9 @@ import {
 import { trackingFields } from "./trackingFields";
 
 export const Discount = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     code: text({
       validation: {
@@ -43,10 +47,6 @@ export const Discount = list({
     }),
     carts: relationship({
       ref: "Cart.discounts",
-      many: true,
-    }),
-    regions: relationship({
-      ref: "Region.discounts",
       many: true,
     }),
     lineItemAdjustments: relationship({

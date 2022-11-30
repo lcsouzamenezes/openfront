@@ -1,8 +1,12 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import { select, integer, relationship } from "@keystone-6/core/fields";
 import { trackingFields } from "./trackingFields";
 
 export const ShippingOptionRequirement = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     type: select({
       type: "enum",

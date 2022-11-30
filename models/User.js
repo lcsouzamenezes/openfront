@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import {
   json,
   password,
@@ -10,17 +11,20 @@ import { permissions, rules } from "../access";
 import { trackingFields } from "./trackingFields";
 
 export const User = list({
+  // access: {
+  //   operation: {
+  //     create: () => true,
+  //     // only people with the permission can delete themselves!
+  //     // You can't delete yourself
+  //     delete: permissions.canManageUsers,
+  //   },
+  //   filter: {
+  //     query: rules.canManageUsers,
+  //     update: rules.canManageUsers,
+  //   },
+  // },
   access: {
-    operation: {
-      create: () => true,
-      // only people with the permission can delete themselves!
-      // You can't delete yourself
-      delete: permissions.canManageUsers,
-    },
-    filter: {
-      query: rules.canManageUsers,
-      update: rules.canManageUsers,
-    },
+    operation: denyAll,
   },
   ui: {
     // hide the backend UI from regular users

@@ -3,15 +3,19 @@ import { list } from '@keystone-6/core';
 import { permissions } from '../access';
 import { permissionFields } from './fields';
 import { trackingFields } from './trackingFields';
+import { denyAll } from '@keystone-6/core/access';
 
 export const Role = list({
+  // access: {
+  //   operation: {
+  //     create: permissions.canManageRoles,
+  //     query: permissions.canManageRoles,
+  //     update: permissions.canManageRoles,
+  //     delete: permissions.canManageRoles,
+  //   },
+  // },
   access: {
-    operation: {
-      create: permissions.canManageRoles,
-      query: permissions.canManageRoles,
-      update: permissions.canManageRoles,
-      delete: permissions.canManageRoles,
-    },
+    operation: denyAll,
   },
   ui: {
     hideCreate: args => !permissions.canManageRoles(args),

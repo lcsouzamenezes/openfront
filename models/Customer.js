@@ -1,8 +1,12 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import { checkbox, json, text, relationship } from "@keystone-6/core/fields";
 import { trackingFields } from "./trackingFields";
 
 export const Customer = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     email: text({
       isIndexed: "unique",

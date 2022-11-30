@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import {
   json,
   text,
@@ -9,6 +10,9 @@ import {
 import { trackingFields } from "./trackingFields";
 
 export const SalesChannel = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     name: text(),
     description: text(),

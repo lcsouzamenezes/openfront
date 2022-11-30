@@ -31,17 +31,23 @@ model User {
 }
 
 model Role {
-  id                String   @id @default(cuid())
-  name              String   @default("")
-  canManageProducts Boolean  @default(false)
-  canSeeOtherUsers  Boolean  @default(false)
-  canManageUsers    Boolean  @default(false)
-  canManageRoles    Boolean  @default(false)
-  canManageCart     Boolean  @default(false)
-  canManageOrders   Boolean  @default(false)
-  assignedTo        User[]   @relation("User_role")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @default(now()) @updatedAt
+  id                    String   @id @default(cuid())
+  name                  String   @default("")
+  canReadOrders         Boolean  @default(false)
+  canManageOrders       Boolean  @default(false)
+  canReadProducts       Boolean  @default(false)
+  canManageProducts     Boolean  @default(false)
+  canReadFulfillments   Boolean  @default(false)
+  canManageFulfillments Boolean  @default(false)
+  canReadUsers          Boolean  @default(false)
+  canManageUsers        Boolean  @default(false)
+  canReadRoles          Boolean  @default(false)
+  canManageRoles        Boolean  @default(false)
+  canReadCarts          Boolean  @default(false)
+  canManageCarts        Boolean  @default(false)
+  assignedTo            User[]   @relation("User_role")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @default(now()) @updatedAt
 }
 
 model Order {
@@ -543,8 +549,8 @@ model Discount {
   discountRule        DiscountRule?        @relation("Discount_discountRule", fields: [discountRuleId], references: [id])
   discountRuleId      String?              @map("discountRule")
   carts               Cart[]               @relation("Cart_discounts")
-  regions             Region[]             @relation("Discount_regions")
   lineItemAdjustments LineItemAdjustment[] @relation("LineItemAdjustment_discount")
+  regions             Region[]             @relation("Discount_regions")
   orders              Order[]              @relation("Discount_orders")
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @default(now()) @updatedAt
@@ -660,17 +666,17 @@ model GiftCard {
   isDisabled           Boolean               @default(false)
   endsAt               DateTime?
   metadata             Json?
-  region               Region?               @relation("GiftCard_region", fields: [regionId], references: [id])
-  regionId             String?               @map("region")
   order                Order?                @relation("GiftCard_order", fields: [orderId], references: [id])
   orderId              String?               @map("order")
   carts                Cart[]                @relation("Cart_giftCards")
   giftCardTransactions GiftCardTransaction[] @relation("GiftCardTransaction_giftCard")
+  region               Region?               @relation("GiftCard_region", fields: [regionId], references: [id])
+  regionId             String?               @map("region")
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @default(now()) @updatedAt
 
-  @@index([regionId])
   @@index([orderId])
+  @@index([regionId])
 }
 
 model GiftCardTransaction {
@@ -1109,10 +1115,10 @@ model TaxRate {
   code            String           @default("")
   name            String           @default("")
   metadata        Json?
-  region          Region?          @relation("TaxRate_region", fields: [regionId], references: [id])
-  regionId        String?          @map("region")
   products        Product[]        @relation("Product_taxRates")
   productTypes    ProductType[]    @relation("ProductType_taxRates")
+  region          Region?          @relation("TaxRate_region", fields: [regionId], references: [id])
+  regionId        String?          @map("region")
   shippingOptions ShippingOption[] @relation("ShippingOption_taxRates")
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @default(now()) @updatedAt

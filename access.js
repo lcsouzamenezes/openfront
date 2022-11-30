@@ -17,15 +17,12 @@ const generatedPermissions = Object.fromEntries(
 // Permissions check if someone meets a criteria - yes or no.
 export const permissions = {
   ...generatedPermissions,
-  isAwesome({ session }) {
-    return !!session?.data.name.includes("wes");
-  },
 };
 
 // Rule based function
 // Rules can return a boolean - yes or no - or a filter which limits which products they can CRUD.
 export const rules = {
-  canManageProducts({ session }) {
+  canManageOrders({ session }) {
     if (!isSignedIn({ session })) {
       return false;
     }
@@ -34,7 +31,7 @@ export const rules = {
       return true;
     }
     // 2. If not, do they own this item?
-    return { user: { id: { equals: session?.itemId } } };
+    // return { user: { id: { equals: session?.itemId } } };
   },
   canManageProducts({ session }) {
     if (!isSignedIn({ session })) {
@@ -45,18 +42,7 @@ export const rules = {
       return true;
     }
     // 2. If not, do they own this item?
-    return { user: { id: { equals: session?.itemId } } };
-  },
-  canOrder({ session }) {
-    if (!isSignedIn({ session })) {
-      return false;
-    }
-    // 1. Do they have the permission of canManageProducts
-    if (permissions.canManageCart({ session })) {
-      return true;
-    }
-    // 2. If not, do they own this item?
-    return { user: { id: { equals: session?.itemId } } };
+    // return { user: { id: { equals: session?.itemId } } };
   },
   canManageOrderItems({ session }) {
     if (!isSignedIn({ session })) {
@@ -67,7 +53,7 @@ export const rules = {
       return true;
     }
     // 2. If not, do they own this item?
-    return { order: { user: { id: { equals: session?.itemId } } } };
+    // return { order: { user: { id: { equals: session?.itemId } } } };
   },
   canReadProducts({ session }) {
     if (!isSignedIn({ session })) {
@@ -77,7 +63,7 @@ export const rules = {
       return true; // They can read everything!
     }
     // They should only see available products (based on the status field)
-    return { status: { equals: "AVAILABLE" } };
+    // return { status: { equals: "AVAILABLE" } };
   },
   canManageUsers({ session }) {
     if (!isSignedIn({ session })) {
@@ -87,6 +73,6 @@ export const rules = {
       return true;
     }
     // Otherwise they may only update themselves!
-    return { id: { equals: session?.itemId } };
+    // return { id: { equals: session?.itemId } };
   },
 };

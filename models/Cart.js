@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import {
   json,
   select,
@@ -10,6 +11,9 @@ import {
 import { trackingFields } from "./trackingFields";
 
 export const Cart = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     email: text(),
     type: select({

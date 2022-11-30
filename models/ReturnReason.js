@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import {
   json,
   text,
@@ -7,6 +8,9 @@ import {
 import { trackingFields } from "./trackingFields";
 
 export const ReturnReason = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     value: text({
       isIndexed: "unique",

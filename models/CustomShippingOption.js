@@ -1,8 +1,12 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import { integer, json, relationship } from "@keystone-6/core/fields";
 import { trackingFields } from "./trackingFields";
 
 export const CustomShippingOption = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     price: integer({
       validation: {

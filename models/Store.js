@@ -1,8 +1,12 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import { json, text, relationship } from "@keystone-6/core/fields";
 import { trackingFields } from "./trackingFields";
 
 export const Store = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     name: text({
       defaultValue: "Openfront Store",

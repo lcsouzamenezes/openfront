@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import { json, text, relationship, image } from "@keystone-6/core/fields";
 import { trackingFields } from "./trackingFields";
 
@@ -10,6 +11,9 @@ import { trackingFields } from "./trackingFields";
 // };
 
 export const ProductImage = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     // image: cloudinaryImage({
     //   cloudinary,

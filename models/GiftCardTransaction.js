@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import {
   checkbox,
   integer,
@@ -8,6 +9,9 @@ import {
 import { trackingFields } from "./trackingFields";
 
 export const GiftCardTransaction = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     amount: integer({
       validation: {

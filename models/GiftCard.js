@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import {
   checkbox,
   integer,
@@ -10,6 +11,9 @@ import {
 import { trackingFields } from "./trackingFields";
 
 export const GiftCard = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     code: text({
       validation: {
@@ -29,9 +33,6 @@ export const GiftCard = list({
     isDisabled: checkbox(),
     endsAt: timestamp(),
     metadata: json(),
-    region: relationship({
-      ref: "region",
-    }),
     order: relationship({
       ref: "Order.giftCards",
     }),

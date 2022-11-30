@@ -2,6 +2,7 @@ import { relationship } from "@keystone-6/core/fields";
 import { list } from "@keystone-6/core";
 import { isSignedIn, rules, permissions } from "../access";
 import { trackingFields } from "./trackingFields";
+import { denyAll } from "@keystone-6/core/access";
 
 const canManageKeys = ({ session }) => {
   if (!session) {
@@ -33,10 +34,7 @@ export const ApiKey = list({
     },
   },
   access: {
-    create: isSignedIn,
-    read: canManageKeys,
-    update: canManageKeys,
-    delete: canManageKeys,
+    operation: denyAll,
   },
   fields: {
     user: relationship({

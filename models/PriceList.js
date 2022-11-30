@@ -1,8 +1,12 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import { select, text, timestamp, relationship } from "@keystone-6/core/fields";
 import { trackingFields } from "./trackingFields";
 
 export const PriceList = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     name: text({
       validation: {

@@ -7,12 +7,7 @@ type User {
   email: String
   password: PasswordState
   role: Role
-  apiKeys(
-    where: ApiKeyWhereInput! = {}
-    orderBy: [ApiKeyOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ApiKey!]
+  apiKeys(where: ApiKeyWhereInput! = {}, orderBy: [ApiKeyOrderByInput!]! = [], take: Int, skip: Int! = 0): [ApiKey!]
   apiKeysCount(where: ApiKeyWhereInput! = {}): Int
   metadata: JSON
   createdAt: DateTime
@@ -26,8 +21,7 @@ type PasswordState {
   isSet: Boolean!
 }
 
-scalar DateTime
-  @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
+scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
 
 input UserWhereUniqueInput {
   id: ID
@@ -202,18 +196,19 @@ input ApiKeyRelateToManyForCreateInput {
 type Role {
   id: ID!
   name: String
-  canManageProducts: Boolean
-  canSeeOtherUsers: Boolean
-  canManageUsers: Boolean
-  canManageRoles: Boolean
-  canManageCart: Boolean
+  canReadOrders: Boolean
   canManageOrders: Boolean
-  assignedTo(
-    where: UserWhereInput! = {}
-    orderBy: [UserOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [User!]
+  canReadProducts: Boolean
+  canManageProducts: Boolean
+  canReadFulfillments: Boolean
+  canManageFulfillments: Boolean
+  canReadUsers: Boolean
+  canManageUsers: Boolean
+  canReadRoles: Boolean
+  canManageRoles: Boolean
+  canReadCarts: Boolean
+  canManageCarts: Boolean
+  assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0): [User!]
   assignedToCount(where: UserWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -229,12 +224,18 @@ input RoleWhereInput {
   NOT: [RoleWhereInput!]
   id: IDFilter
   name: StringFilter
-  canManageProducts: BooleanFilter
-  canSeeOtherUsers: BooleanFilter
-  canManageUsers: BooleanFilter
-  canManageRoles: BooleanFilter
-  canManageCart: BooleanFilter
+  canReadOrders: BooleanFilter
   canManageOrders: BooleanFilter
+  canReadProducts: BooleanFilter
+  canManageProducts: BooleanFilter
+  canReadFulfillments: BooleanFilter
+  canManageFulfillments: BooleanFilter
+  canReadUsers: BooleanFilter
+  canManageUsers: BooleanFilter
+  canReadRoles: BooleanFilter
+  canManageRoles: BooleanFilter
+  canReadCarts: BooleanFilter
+  canManageCarts: BooleanFilter
   assignedTo: UserManyRelationFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
@@ -254,24 +255,36 @@ input UserManyRelationFilter {
 input RoleOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  canManageProducts: OrderDirection
-  canSeeOtherUsers: OrderDirection
-  canManageUsers: OrderDirection
-  canManageRoles: OrderDirection
-  canManageCart: OrderDirection
+  canReadOrders: OrderDirection
   canManageOrders: OrderDirection
+  canReadProducts: OrderDirection
+  canManageProducts: OrderDirection
+  canReadFulfillments: OrderDirection
+  canManageFulfillments: OrderDirection
+  canReadUsers: OrderDirection
+  canManageUsers: OrderDirection
+  canReadRoles: OrderDirection
+  canManageRoles: OrderDirection
+  canReadCarts: OrderDirection
+  canManageCarts: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input RoleUpdateInput {
   name: String
-  canManageProducts: Boolean
-  canSeeOtherUsers: Boolean
-  canManageUsers: Boolean
-  canManageRoles: Boolean
-  canManageCart: Boolean
+  canReadOrders: Boolean
   canManageOrders: Boolean
+  canReadProducts: Boolean
+  canManageProducts: Boolean
+  canReadFulfillments: Boolean
+  canManageFulfillments: Boolean
+  canReadUsers: Boolean
+  canManageUsers: Boolean
+  canReadRoles: Boolean
+  canManageRoles: Boolean
+  canReadCarts: Boolean
+  canManageCarts: Boolean
   assignedTo: UserRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -291,12 +304,18 @@ input RoleUpdateArgs {
 
 input RoleCreateInput {
   name: String
-  canManageProducts: Boolean
-  canSeeOtherUsers: Boolean
-  canManageUsers: Boolean
-  canManageRoles: Boolean
-  canManageCart: Boolean
+  canReadOrders: Boolean
   canManageOrders: Boolean
+  canReadProducts: Boolean
+  canManageProducts: Boolean
+  canReadFulfillments: Boolean
+  canManageFulfillments: Boolean
+  canReadUsers: Boolean
+  canManageUsers: Boolean
+  canReadRoles: Boolean
+  canManageRoles: Boolean
+  canReadCarts: Boolean
+  canManageCarts: Boolean
   assignedTo: UserRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -327,82 +346,27 @@ type Order {
   cart: Cart
   customer: Customer
   region: Region
-  claimOrders(
-    where: ClaimOrderWhereInput! = {}
-    orderBy: [ClaimOrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimOrder!]
+  claimOrders(where: ClaimOrderWhereInput! = {}, orderBy: [ClaimOrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimOrder!]
   claimOrdersCount(where: ClaimOrderWhereInput! = {}): Int
-  fulfillments(
-    where: FulfillmentWhereInput! = {}
-    orderBy: [FulfillmentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Fulfillment!]
+  fulfillments(where: FulfillmentWhereInput! = {}, orderBy: [FulfillmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fulfillment!]
   fulfillmentsCount(where: FulfillmentWhereInput! = {}): Int
-  giftCards(
-    where: GiftCardWhereInput! = {}
-    orderBy: [GiftCardOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [GiftCard!]
+  giftCards(where: GiftCardWhereInput! = {}, orderBy: [GiftCardOrderByInput!]! = [], take: Int, skip: Int! = 0): [GiftCard!]
   giftCardsCount(where: GiftCardWhereInput! = {}): Int
-  giftCardTransactions(
-    where: GiftCardTransactionWhereInput! = {}
-    orderBy: [GiftCardTransactionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [GiftCardTransaction!]
+  giftCardTransactions(where: GiftCardTransactionWhereInput! = {}, orderBy: [GiftCardTransactionOrderByInput!]! = [], take: Int, skip: Int! = 0): [GiftCardTransaction!]
   giftCardTransactionsCount(where: GiftCardTransactionWhereInput! = {}): Int
-  lineItems(
-    where: LineItemWhereInput! = {}
-    orderBy: [LineItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItem!]
+  lineItems(where: LineItemWhereInput! = {}, orderBy: [LineItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItem!]
   lineItemsCount(where: LineItemWhereInput! = {}): Int
-  discounts(
-    where: DiscountWhereInput! = {}
-    orderBy: [DiscountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Discount!]
+  discounts(where: DiscountWhereInput! = {}, orderBy: [DiscountOrderByInput!]! = [], take: Int, skip: Int! = 0): [Discount!]
   discountsCount(where: DiscountWhereInput! = {}): Int
-  payments(
-    where: PaymentWhereInput! = {}
-    orderBy: [PaymentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Payment!]
+  payments(where: PaymentWhereInput! = {}, orderBy: [PaymentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Payment!]
   paymentsCount(where: PaymentWhereInput! = {}): Int
-  refunds(
-    where: RefundWhereInput! = {}
-    orderBy: [RefundOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Refund!]
+  refunds(where: RefundWhereInput! = {}, orderBy: [RefundOrderByInput!]! = [], take: Int, skip: Int! = 0): [Refund!]
   refundsCount(where: RefundWhereInput! = {}): Int
-  returns(
-    where: ReturnWhereInput! = {}
-    orderBy: [ReturnOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Return!]
+  returns(where: ReturnWhereInput! = {}, orderBy: [ReturnOrderByInput!]! = [], take: Int, skip: Int! = 0): [Return!]
   returnsCount(where: ReturnWhereInput! = {}): Int
-  shippingMethods(
-    where: ShippingMethodWhereInput! = {}
-    orderBy: [ShippingMethodOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingMethod!]
+  shippingMethods(where: ShippingMethodWhereInput! = {}, orderBy: [ShippingMethodOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingMethod!]
   shippingMethodsCount(where: ShippingMethodWhereInput! = {}): Int
-  swaps(
-    where: SwapWhereInput! = {}
-    orderBy: [SwapOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Swap!]
+  swaps(where: SwapWhereInput! = {}, orderBy: [SwapOrderByInput!]! = [], take: Int, skip: Int! = 0): [Swap!]
   swapsCount(where: SwapWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -896,40 +860,15 @@ type LineItem {
   swap: Swap
   order: Order
   productVariant: ProductVariant
-  claimItems(
-    where: ClaimItemWhereInput! = {}
-    orderBy: [ClaimItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimItem!]
+  claimItems(where: ClaimItemWhereInput! = {}, orderBy: [ClaimItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimItem!]
   claimItemsCount(where: ClaimItemWhereInput! = {}): Int
-  fulfillmentItems(
-    where: FulfillmentItemWhereInput! = {}
-    orderBy: [FulfillmentItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [FulfillmentItem!]
+  fulfillmentItems(where: FulfillmentItemWhereInput! = {}, orderBy: [FulfillmentItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [FulfillmentItem!]
   fulfillmentItemsCount(where: FulfillmentItemWhereInput! = {}): Int
-  lineItemAdjustments(
-    where: LineItemAdjustmentWhereInput! = {}
-    orderBy: [LineItemAdjustmentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItemAdjustment!]
+  lineItemAdjustments(where: LineItemAdjustmentWhereInput! = {}, orderBy: [LineItemAdjustmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItemAdjustment!]
   lineItemAdjustmentsCount(where: LineItemAdjustmentWhereInput! = {}): Int
-  lineItemTaxLines(
-    where: LineItemTaxLineWhereInput! = {}
-    orderBy: [LineItemTaxLineOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItemTaxLine!]
+  lineItemTaxLines(where: LineItemTaxLineWhereInput! = {}, orderBy: [LineItemTaxLineOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItemTaxLine!]
   lineItemTaxLinesCount(where: LineItemTaxLineWhereInput! = {}): Int
-  returnItems(
-    where: ReturnItemWhereInput! = {}
-    orderBy: [ReturnItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ReturnItem!]
+  returnItems(where: ReturnItemWhereInput! = {}, orderBy: [ReturnItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [ReturnItem!]
   returnItemsCount(where: ReturnItemWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -1221,54 +1160,19 @@ type Product {
   productCollection: ProductCollection
   shippingProfile: ShippingProfile
   productType: ProductType
-  discountConditions(
-    where: DiscountConditionWhereInput! = {}
-    orderBy: [DiscountConditionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DiscountCondition!]
+  discountConditions(where: DiscountConditionWhereInput! = {}, orderBy: [DiscountConditionOrderByInput!]! = [], take: Int, skip: Int! = 0): [DiscountCondition!]
   discountConditionsCount(where: DiscountConditionWhereInput! = {}): Int
-  discountRules(
-    where: DiscountRuleWhereInput! = {}
-    orderBy: [DiscountRuleOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DiscountRule!]
+  discountRules(where: DiscountRuleWhereInput! = {}, orderBy: [DiscountRuleOrderByInput!]! = [], take: Int, skip: Int! = 0): [DiscountRule!]
   discountRulesCount(where: DiscountRuleWhereInput! = {}): Int
-  productImages(
-    where: ProductImageWhereInput! = {}
-    orderBy: [ProductImageOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductImage!]
+  productImages(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductImage!]
   productImagesCount(where: ProductImageWhereInput! = {}): Int
-  productOptions(
-    where: ProductOptionWhereInput! = {}
-    orderBy: [ProductOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductOption!]
+  productOptions(where: ProductOptionWhereInput! = {}, orderBy: [ProductOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductOption!]
   productOptionsCount(where: ProductOptionWhereInput! = {}): Int
-  productTags(
-    where: ProductTagWhereInput! = {}
-    orderBy: [ProductTagOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductTag!]
+  productTags(where: ProductTagWhereInput! = {}, orderBy: [ProductTagOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductTag!]
   productTagsCount(where: ProductTagWhereInput! = {}): Int
-  taxRates(
-    where: TaxRateWhereInput! = {}
-    orderBy: [TaxRateOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TaxRate!]
+  taxRates(where: TaxRateWhereInput! = {}, orderBy: [TaxRateOrderByInput!]! = [], take: Int, skip: Int! = 0): [TaxRate!]
   taxRatesCount(where: TaxRateWhereInput! = {}): Int
-  productVariants(
-    where: ProductVariantWhereInput! = {}
-    orderBy: [ProductVariantOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductVariant!]
+  productVariants(where: ProductVariantWhereInput! = {}, orderBy: [ProductVariantOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductVariant!]
   productVariantsCount(where: ProductVariantWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -1586,19 +1490,9 @@ type ProductCollection {
   title: String
   handle: String
   metadata: JSON
-  discountConditions(
-    where: DiscountConditionWhereInput! = {}
-    orderBy: [DiscountConditionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DiscountCondition!]
+  discountConditions(where: DiscountConditionWhereInput! = {}, orderBy: [DiscountConditionOrderByInput!]! = [], take: Int, skip: Int! = 0): [DiscountCondition!]
   discountConditionsCount(where: DiscountConditionWhereInput! = {}): Int
-  products(
-    where: ProductWhereInput! = {}
-    orderBy: [ProductOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Product!]
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -1676,12 +1570,7 @@ type ProductImage {
   id: ID!
   image: ImageFieldOutput
   altText: String
-  products(
-    where: ProductWhereInput! = {}
-    orderBy: [ProductOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Product!]
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
   metadata: JSON
   createdAt: DateTime
@@ -1739,9 +1628,7 @@ input ImageFieldInput {
   upload: Upload!
 }
 
-"""
-The `Upload` scalar type represents a file upload.
-"""
+"""The `Upload` scalar type represents a file upload."""
 scalar Upload
 
 input ProductImageUpdateArgs {
@@ -1763,12 +1650,7 @@ type ProductOption {
   title: String
   metadata: JSON
   product: Product
-  productOptionValues(
-    where: ProductOptionValueWhereInput! = {}
-    orderBy: [ProductOptionValueOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductOptionValue!]
+  productOptionValues(where: ProductOptionValueWhereInput! = {}, orderBy: [ProductOptionValueOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductOptionValue!]
   productOptionValuesCount(where: ProductOptionValueWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -1920,19 +1802,9 @@ type ProductTag {
   id: ID!
   value: String
   metadata: JSON
-  discountConditions(
-    where: DiscountConditionWhereInput! = {}
-    orderBy: [DiscountConditionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DiscountCondition!]
+  discountConditions(where: DiscountConditionWhereInput! = {}, orderBy: [DiscountConditionOrderByInput!]! = [], take: Int, skip: Int! = 0): [DiscountCondition!]
   discountConditionsCount(where: DiscountConditionWhereInput! = {}): Int
-  products(
-    where: ProductWhereInput! = {}
-    orderBy: [ProductOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Product!]
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -1988,26 +1860,11 @@ type ProductType {
   id: ID!
   value: String
   metadata: JSON
-  discountConditions(
-    where: DiscountConditionWhereInput! = {}
-    orderBy: [DiscountConditionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DiscountCondition!]
+  discountConditions(where: DiscountConditionWhereInput! = {}, orderBy: [DiscountConditionOrderByInput!]! = [], take: Int, skip: Int! = 0): [DiscountCondition!]
   discountConditionsCount(where: DiscountConditionWhereInput! = {}): Int
-  products(
-    where: ProductWhereInput! = {}
-    orderBy: [ProductOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Product!]
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
-  taxRates(
-    where: TaxRateWhereInput! = {}
-    orderBy: [TaxRateOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TaxRate!]
+  taxRates(where: TaxRateWhereInput! = {}, orderBy: [TaxRateOrderByInput!]! = [], take: Int, skip: Int! = 0): [TaxRate!]
   taxRatesCount(where: TaxRateWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -2083,33 +1940,13 @@ type ProductVariant {
   metadata: JSON
   variantRank: Int
   product: Product
-  claimItems(
-    where: ClaimItemWhereInput! = {}
-    orderBy: [ClaimItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimItem!]
+  claimItems(where: ClaimItemWhereInput! = {}, orderBy: [ClaimItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimItem!]
   claimItemsCount(where: ClaimItemWhereInput! = {}): Int
-  lineItems(
-    where: LineItemWhereInput! = {}
-    orderBy: [LineItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItem!]
+  lineItems(where: LineItemWhereInput! = {}, orderBy: [LineItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItem!]
   lineItemsCount(where: LineItemWhereInput! = {}): Int
-  moneyAmounts(
-    where: MoneyAmountWhereInput! = {}
-    orderBy: [MoneyAmountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [MoneyAmount!]
+  moneyAmounts(where: MoneyAmountWhereInput! = {}, orderBy: [MoneyAmountOrderByInput!]! = [], take: Int, skip: Int! = 0): [MoneyAmount!]
   moneyAmountsCount(where: MoneyAmountWhereInput! = {}): Int
-  productOptionValues(
-    where: ProductOptionValueWhereInput! = {}
-    orderBy: [ProductOptionValueOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductOptionValue!]
+  productOptionValues(where: ProductOptionValueWhereInput! = {}, orderBy: [ProductOptionValueOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductOptionValue!]
   productOptionValuesCount(where: ProductOptionValueWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -2365,33 +2202,13 @@ type Address {
   country: Country
   customer: Customer
   cart: Cart
-  claimOrders(
-    where: ClaimOrderWhereInput! = {}
-    orderBy: [ClaimOrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimOrder!]
+  claimOrders(where: ClaimOrderWhereInput! = {}, orderBy: [ClaimOrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimOrder!]
   claimOrdersCount(where: ClaimOrderWhereInput! = {}): Int
-  ordersUsingAsBillingAddress(
-    where: OrderWhereInput! = {}
-    orderBy: [OrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Order!]
+  ordersUsingAsBillingAddress(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [Order!]
   ordersUsingAsBillingAddressCount(where: OrderWhereInput! = {}): Int
-  ordersUsingAsShippingAddress(
-    where: OrderWhereInput! = {}
-    orderBy: [OrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Order!]
+  ordersUsingAsShippingAddress(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [Order!]
   ordersUsingAsShippingAddressCount(where: OrderWhereInput! = {}): Int
-  swaps(
-    where: SwapWhereInput! = {}
-    orderBy: [SwapOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Swap!]
+  swaps(where: SwapWhereInput! = {}, orderBy: [SwapOrderByInput!]! = [], take: Int, skip: Int! = 0): [Swap!]
   swapsCount(where: SwapWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -2533,58 +2350,23 @@ type Cart {
   paymentAuthorizedAt: DateTime
   customer: Customer
   region: Region
-  addresses(
-    where: AddressWhereInput! = {}
-    orderBy: [AddressOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Address!]
+  addresses(where: AddressWhereInput! = {}, orderBy: [AddressOrderByInput!]! = [], take: Int, skip: Int! = 0): [Address!]
   addressesCount(where: AddressWhereInput! = {}): Int
-  discounts(
-    where: DiscountWhereInput! = {}
-    orderBy: [DiscountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Discount!]
+  discounts(where: DiscountWhereInput! = {}, orderBy: [DiscountOrderByInput!]! = [], take: Int, skip: Int! = 0): [Discount!]
   discountsCount(where: DiscountWhereInput! = {}): Int
-  giftCards(
-    where: GiftCardWhereInput! = {}
-    orderBy: [GiftCardOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [GiftCard!]
+  giftCards(where: GiftCardWhereInput! = {}, orderBy: [GiftCardOrderByInput!]! = [], take: Int, skip: Int! = 0): [GiftCard!]
   giftCardsCount(where: GiftCardWhereInput! = {}): Int
   draftOrder: DraftOrder
   order: Order
-  lineItems(
-    where: LineItemWhereInput! = {}
-    orderBy: [LineItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItem!]
+  lineItems(where: LineItemWhereInput! = {}, orderBy: [LineItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItem!]
   lineItemsCount(where: LineItemWhereInput! = {}): Int
-  customShippingOptions(
-    where: CustomShippingOptionWhereInput! = {}
-    orderBy: [CustomShippingOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [CustomShippingOption!]
+  customShippingOptions(where: CustomShippingOptionWhereInput! = {}, orderBy: [CustomShippingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [CustomShippingOption!]
   customShippingOptionsCount(where: CustomShippingOptionWhereInput! = {}): Int
   swap: Swap
-  shippingMethods(
-    where: ShippingMethodWhereInput! = {}
-    orderBy: [ShippingMethodOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingMethod!]
+  shippingMethods(where: ShippingMethodWhereInput! = {}, orderBy: [ShippingMethodOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingMethod!]
   shippingMethodsCount(where: ShippingMethodWhereInput! = {}): Int
   payment: Payment
-  paymentSessions(
-    where: PaymentSessionWhereInput! = {}
-    orderBy: [PaymentSessionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [PaymentSession!]
+  paymentSessions(where: PaymentSessionWhereInput! = {}, orderBy: [PaymentSessionOrderByInput!]! = [], take: Int, skip: Int! = 0): [PaymentSession!]
   paymentSessionsCount(where: PaymentSessionWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -2830,34 +2612,14 @@ type ClaimOrder {
   noNotification: Boolean
   address: Address
   order: Order
-  claimItems(
-    where: ClaimItemWhereInput! = {}
-    orderBy: [ClaimItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimItem!]
+  claimItems(where: ClaimItemWhereInput! = {}, orderBy: [ClaimItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimItem!]
   claimItemsCount(where: ClaimItemWhereInput! = {}): Int
-  fulfillments(
-    where: FulfillmentWhereInput! = {}
-    orderBy: [FulfillmentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Fulfillment!]
+  fulfillments(where: FulfillmentWhereInput! = {}, orderBy: [FulfillmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fulfillment!]
   fulfillmentsCount(where: FulfillmentWhereInput! = {}): Int
-  lineItems(
-    where: LineItemWhereInput! = {}
-    orderBy: [LineItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItem!]
+  lineItems(where: LineItemWhereInput! = {}, orderBy: [LineItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItem!]
   lineItemsCount(where: LineItemWhereInput! = {}): Int
   return: Return
-  shippingMethods(
-    where: ShippingMethodWhereInput! = {}
-    orderBy: [ShippingMethodOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingMethod!]
+  shippingMethods(where: ShippingMethodWhereInput! = {}, orderBy: [ShippingMethodOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingMethod!]
   shippingMethodsCount(where: ShippingMethodWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -3012,19 +2774,9 @@ type ClaimItem {
   productVariant: ProductVariant
   lineItem: LineItem
   claimOrder: ClaimOrder
-  claimImages(
-    where: ClaimImageWhereInput! = {}
-    orderBy: [ClaimImageOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimImage!]
+  claimImages(where: ClaimImageWhereInput! = {}, orderBy: [ClaimImageOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimImage!]
   claimImagesCount(where: ClaimImageWhereInput! = {}): Int
-  claimTags(
-    where: ClaimTagWhereInput! = {}
-    orderBy: [ClaimTagOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimTag!]
+  claimTags(where: ClaimTagWhereInput! = {}, orderBy: [ClaimTagOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimTag!]
   claimTagsCount(where: ClaimTagWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -3224,12 +2976,7 @@ type ClaimTag {
   id: ID!
   value: String
   metadata: JSON
-  claimItems(
-    where: ClaimItemWhereInput! = {}
-    orderBy: [ClaimItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimItem!]
+  claimItems(where: ClaimItemWhereInput! = {}, orderBy: [ClaimItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimItem!]
   claimItemsCount(where: ClaimItemWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -3286,12 +3033,7 @@ type Country {
   name: String
   displayName: String
   region: Region
-  addresses(
-    where: AddressWhereInput! = {}
-    orderBy: [AddressOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Address!]
+  addresses(where: AddressWhereInput! = {}, orderBy: [AddressOrderByInput!]! = [], take: Int, skip: Int! = 0): [Address!]
   addressesCount(where: AddressWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -3364,40 +3106,15 @@ type Currency {
   symbol: String
   symbolNative: String
   name: String
-  moneyAmounts(
-    where: MoneyAmountWhereInput! = {}
-    orderBy: [MoneyAmountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [MoneyAmount!]
+  moneyAmounts(where: MoneyAmountWhereInput! = {}, orderBy: [MoneyAmountOrderByInput!]! = [], take: Int, skip: Int! = 0): [MoneyAmount!]
   moneyAmountsCount(where: MoneyAmountWhereInput! = {}): Int
-  orders(
-    where: OrderWhereInput! = {}
-    orderBy: [OrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Order!]
+  orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
-  payments(
-    where: PaymentWhereInput! = {}
-    orderBy: [PaymentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Payment!]
+  payments(where: PaymentWhereInput! = {}, orderBy: [PaymentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Payment!]
   paymentsCount(where: PaymentWhereInput! = {}): Int
-  regions(
-    where: RegionWhereInput! = {}
-    orderBy: [RegionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Region!]
+  regions(where: RegionWhereInput! = {}, orderBy: [RegionOrderByInput!]! = [], take: Int, skip: Int! = 0): [Region!]
   regionsCount(where: RegionWhereInput! = {}): Int
-  stores(
-    where: StoreWhereInput! = {}
-    orderBy: [StoreOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Store!]
+  stores(where: StoreWhereInput! = {}, orderBy: [StoreOrderByInput!]! = [], take: Int, skip: Int! = 0): [Store!]
   storesCount(where: StoreWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -3514,40 +3231,15 @@ type Customer {
   phone: String
   hasAccount: Boolean
   metadata: JSON
-  addresses(
-    where: AddressWhereInput! = {}
-    orderBy: [AddressOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Address!]
+  addresses(where: AddressWhereInput! = {}, orderBy: [AddressOrderByInput!]! = [], take: Int, skip: Int! = 0): [Address!]
   addressesCount(where: AddressWhereInput! = {}): Int
-  orders(
-    where: OrderWhereInput! = {}
-    orderBy: [OrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Order!]
+  orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
-  carts(
-    where: CartWhereInput! = {}
-    orderBy: [CartOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Cart!]
+  carts(where: CartWhereInput! = {}, orderBy: [CartOrderByInput!]! = [], take: Int, skip: Int! = 0): [Cart!]
   cartsCount(where: CartWhereInput! = {}): Int
-  customerGroups(
-    where: CustomerGroupWhereInput! = {}
-    orderBy: [CustomerGroupOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [CustomerGroup!]
+  customerGroups(where: CustomerGroupWhereInput! = {}, orderBy: [CustomerGroupOrderByInput!]! = [], take: Int, skip: Int! = 0): [CustomerGroup!]
   customerGroupsCount(where: CustomerGroupWhereInput! = {}): Int
-  notifications(
-    where: NotificationWhereInput! = {}
-    orderBy: [NotificationOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Notification!]
+  notifications(where: NotificationWhereInput! = {}, orderBy: [NotificationOrderByInput!]! = [], take: Int, skip: Int! = 0): [Notification!]
   notificationsCount(where: NotificationWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -3692,26 +3384,11 @@ type CustomerGroup {
   id: ID!
   name: String
   metadata: JSON
-  customers(
-    where: CustomerWhereInput! = {}
-    orderBy: [CustomerOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Customer!]
+  customers(where: CustomerWhereInput! = {}, orderBy: [CustomerOrderByInput!]! = [], take: Int, skip: Int! = 0): [Customer!]
   customersCount(where: CustomerWhereInput! = {}): Int
-  discountConditions(
-    where: DiscountConditionWhereInput! = {}
-    orderBy: [DiscountConditionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DiscountCondition!]
+  discountConditions(where: DiscountConditionWhereInput! = {}, orderBy: [DiscountConditionOrderByInput!]! = [], take: Int, skip: Int! = 0): [DiscountCondition!]
   discountConditionsCount(where: DiscountConditionWhereInput! = {}): Int
-  priceLists(
-    where: PriceListWhereInput! = {}
-    orderBy: [PriceListOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [PriceList!]
+  priceLists(where: PriceListWhereInput! = {}, orderBy: [PriceListOrderByInput!]! = [], take: Int, skip: Int! = 0): [PriceList!]
   priceListsCount(where: PriceListWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -3881,33 +3558,13 @@ type Discount {
   usageCount: Int
   validDuration: String
   discountRule: DiscountRule
-  carts(
-    where: CartWhereInput! = {}
-    orderBy: [CartOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Cart!]
+  carts(where: CartWhereInput! = {}, orderBy: [CartOrderByInput!]! = [], take: Int, skip: Int! = 0): [Cart!]
   cartsCount(where: CartWhereInput! = {}): Int
-  regions(
-    where: RegionWhereInput! = {}
-    orderBy: [RegionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Region!]
-  regionsCount(where: RegionWhereInput! = {}): Int
-  lineItemAdjustments(
-    where: LineItemAdjustmentWhereInput! = {}
-    orderBy: [LineItemAdjustmentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItemAdjustment!]
+  lineItemAdjustments(where: LineItemAdjustmentWhereInput! = {}, orderBy: [LineItemAdjustmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItemAdjustment!]
   lineItemAdjustmentsCount(where: LineItemAdjustmentWhereInput! = {}): Int
-  orders(
-    where: OrderWhereInput! = {}
-    orderBy: [OrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Order!]
+  regions(where: RegionWhereInput! = {}, orderBy: [RegionOrderByInput!]! = [], take: Int, skip: Int! = 0): [Region!]
+  regionsCount(where: RegionWhereInput! = {}): Int
+  orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -3932,8 +3589,8 @@ input DiscountWhereInput {
   validDuration: StringFilter
   discountRule: DiscountRuleWhereInput
   carts: CartManyRelationFilter
-  regions: RegionManyRelationFilter
   lineItemAdjustments: LineItemAdjustmentManyRelationFilter
+  regions: RegionManyRelationFilter
   orders: OrderManyRelationFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
@@ -3965,8 +3622,8 @@ input DiscountUpdateInput {
   validDuration: String
   discountRule: DiscountRuleRelateToOneForUpdateInput
   carts: CartRelateToManyForUpdateInput
-  regions: RegionRelateToManyForUpdateInput
   lineItemAdjustments: LineItemAdjustmentRelateToManyForUpdateInput
+  regions: RegionRelateToManyForUpdateInput
   orders: OrderRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -3995,8 +3652,8 @@ input DiscountCreateInput {
   validDuration: String
   discountRule: DiscountRuleRelateToOneForCreateInput
   carts: CartRelateToManyForCreateInput
-  regions: RegionRelateToManyForCreateInput
   lineItemAdjustments: LineItemAdjustmentRelateToManyForCreateInput
+  regions: RegionRelateToManyForCreateInput
   orders: OrderRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -4013,40 +3670,15 @@ type DiscountCondition {
   operator: DiscountConditionOperatorType
   metadata: JSON
   discountRule: DiscountRule
-  customerGroups(
-    where: CustomerGroupWhereInput! = {}
-    orderBy: [CustomerGroupOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [CustomerGroup!]
+  customerGroups(where: CustomerGroupWhereInput! = {}, orderBy: [CustomerGroupOrderByInput!]! = [], take: Int, skip: Int! = 0): [CustomerGroup!]
   customerGroupsCount(where: CustomerGroupWhereInput! = {}): Int
-  products(
-    where: ProductWhereInput! = {}
-    orderBy: [ProductOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Product!]
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
-  productCollections(
-    where: ProductCollectionWhereInput! = {}
-    orderBy: [ProductCollectionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductCollection!]
+  productCollections(where: ProductCollectionWhereInput! = {}, orderBy: [ProductCollectionOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductCollection!]
   productCollectionsCount(where: ProductCollectionWhereInput! = {}): Int
-  productTags(
-    where: ProductTagWhereInput! = {}
-    orderBy: [ProductTagOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductTag!]
+  productTags(where: ProductTagWhereInput! = {}, orderBy: [ProductTagOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductTag!]
   productTagsCount(where: ProductTagWhereInput! = {}): Int
-  productTypes(
-    where: ProductTypeWhereInput! = {}
-    orderBy: [ProductTypeOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductType!]
+  productTypes(where: ProductTypeWhereInput! = {}, orderBy: [ProductTypeOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductType!]
   productTypesCount(where: ProductTypeWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -4184,26 +3816,11 @@ type DiscountRule {
   value: Int
   allocation: DiscountRuleAllocationType
   metadata: JSON
-  discounts(
-    where: DiscountWhereInput! = {}
-    orderBy: [DiscountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Discount!]
+  discounts(where: DiscountWhereInput! = {}, orderBy: [DiscountOrderByInput!]! = [], take: Int, skip: Int! = 0): [Discount!]
   discountsCount(where: DiscountWhereInput! = {}): Int
-  discountConditions(
-    where: DiscountConditionWhereInput! = {}
-    orderBy: [DiscountConditionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DiscountCondition!]
+  discountConditions(where: DiscountConditionWhereInput! = {}, orderBy: [DiscountConditionOrderByInput!]! = [], take: Int, skip: Int! = 0): [DiscountCondition!]
   discountConditionsCount(where: DiscountConditionWhereInput! = {}): Int
-  products(
-    where: ProductWhereInput! = {}
-    orderBy: [ProductOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Product!]
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -4401,19 +4018,9 @@ type Fulfillment {
   fulfillmentProvider: FulfillmentProvider
   claimOrder: ClaimOrder
   order: Order
-  fulfillmentItems(
-    where: FulfillmentItemWhereInput! = {}
-    orderBy: [FulfillmentItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [FulfillmentItem!]
+  fulfillmentItems(where: FulfillmentItemWhereInput! = {}, orderBy: [FulfillmentItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [FulfillmentItem!]
   fulfillmentItemsCount(where: FulfillmentItemWhereInput! = {}): Int
-  trackingLinks(
-    where: TrackingLinkWhereInput! = {}
-    orderBy: [TrackingLinkOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TrackingLink!]
+  trackingLinks(where: TrackingLinkWhereInput! = {}, orderBy: [TrackingLinkOrderByInput!]! = [], take: Int, skip: Int! = 0): [TrackingLink!]
   trackingLinksCount(where: TrackingLinkWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -4589,26 +4196,11 @@ input FulfillmentRelateToOneForCreateInput {
 type FulfillmentProvider {
   id: ID!
   isInstalled: Boolean
-  fulfillments(
-    where: FulfillmentWhereInput! = {}
-    orderBy: [FulfillmentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Fulfillment!]
+  fulfillments(where: FulfillmentWhereInput! = {}, orderBy: [FulfillmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fulfillment!]
   fulfillmentsCount(where: FulfillmentWhereInput! = {}): Int
-  regions(
-    where: RegionWhereInput! = {}
-    orderBy: [RegionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Region!]
+  regions(where: RegionWhereInput! = {}, orderBy: [RegionOrderByInput!]! = [], take: Int, skip: Int! = 0): [Region!]
   regionsCount(where: RegionWhereInput! = {}): Int
-  shippingOptions(
-    where: ShippingOptionWhereInput! = {}
-    orderBy: [ShippingOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingOption!]
+  shippingOptions(where: ShippingOptionWhereInput! = {}, orderBy: [ShippingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingOption!]
   shippingOptionsCount(where: ShippingOptionWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -4687,22 +4279,12 @@ type GiftCard {
   isDisabled: Boolean
   endsAt: DateTime
   metadata: JSON
-  region: Region
   order: Order
-  carts(
-    where: CartWhereInput! = {}
-    orderBy: [CartOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Cart!]
+  carts(where: CartWhereInput! = {}, orderBy: [CartOrderByInput!]! = [], take: Int, skip: Int! = 0): [Cart!]
   cartsCount(where: CartWhereInput! = {}): Int
-  giftCardTransactions(
-    where: GiftCardTransactionWhereInput! = {}
-    orderBy: [GiftCardTransactionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [GiftCardTransaction!]
+  giftCardTransactions(where: GiftCardTransactionWhereInput! = {}, orderBy: [GiftCardTransactionOrderByInput!]! = [], take: Int, skip: Int! = 0): [GiftCardTransaction!]
   giftCardTransactionsCount(where: GiftCardTransactionWhereInput! = {}): Int
+  region: Region
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -4721,10 +4303,10 @@ input GiftCardWhereInput {
   balance: IntFilter
   isDisabled: BooleanFilter
   endsAt: DateTimeNullableFilter
-  region: RegionWhereInput
   order: OrderWhereInput
   carts: CartManyRelationFilter
   giftCardTransactions: GiftCardTransactionManyRelationFilter
+  region: RegionWhereInput
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
 }
@@ -4747,10 +4329,10 @@ input GiftCardUpdateInput {
   isDisabled: Boolean
   endsAt: DateTime
   metadata: JSON
-  region: RegionRelateToOneForUpdateInput
   order: OrderRelateToOneForUpdateInput
   carts: CartRelateToManyForUpdateInput
   giftCardTransactions: GiftCardTransactionRelateToManyForUpdateInput
+  region: RegionRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -4767,10 +4349,10 @@ input GiftCardCreateInput {
   isDisabled: Boolean
   endsAt: DateTime
   metadata: JSON
-  region: RegionRelateToOneForCreateInput
   order: OrderRelateToOneForCreateInput
   carts: CartRelateToManyForCreateInput
   giftCardTransactions: GiftCardTransactionRelateToManyForCreateInput
+  region: RegionRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -5307,12 +4889,7 @@ type Notification {
   parentId: String
   notificationProvider: NotificationProvider
   customer: Customer
-  otherNotifications(
-    where: NotificationWhereInput! = {}
-    orderBy: [NotificationOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Notification!]
+  otherNotifications(where: NotificationWhereInput! = {}, orderBy: [NotificationOrderByInput!]! = [], take: Int, skip: Int! = 0): [Notification!]
   otherNotificationsCount(where: NotificationWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -5397,12 +4974,7 @@ input NotificationProviderRelateToOneForCreateInput {
 type NotificationProvider {
   id: ID!
   isInstalled: Boolean
-  notifications(
-    where: NotificationWhereInput! = {}
-    orderBy: [NotificationOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Notification!]
+  notifications(where: NotificationWhereInput! = {}, orderBy: [NotificationOrderByInput!]! = [], take: Int, skip: Int! = 0): [Notification!]
   notificationsCount(where: NotificationWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -5516,19 +5088,9 @@ input OAuthCreateInput {
 type PaymentProvider {
   id: ID!
   isInstalled: Boolean
-  regions(
-    where: RegionWhereInput! = {}
-    orderBy: [RegionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Region!]
+  regions(where: RegionWhereInput! = {}, orderBy: [RegionOrderByInput!]! = [], take: Int, skip: Int! = 0): [Region!]
   regionsCount(where: RegionWhereInput! = {}): Int
-  paymentSessions(
-    where: PaymentSessionWhereInput! = {}
-    orderBy: [PaymentSessionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [PaymentSession!]
+  paymentSessions(where: PaymentSessionWhereInput! = {}, orderBy: [PaymentSessionOrderByInput!]! = [], take: Int, skip: Int! = 0): [PaymentSession!]
   paymentSessionsCount(where: PaymentSessionWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -5678,19 +5240,9 @@ type PriceList {
   status: PriceListStatusType
   startsAt: DateTime
   endsAt: DateTime
-  moneyAmounts(
-    where: MoneyAmountWhereInput! = {}
-    orderBy: [MoneyAmountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [MoneyAmount!]
+  moneyAmounts(where: MoneyAmountWhereInput! = {}, orderBy: [MoneyAmountOrderByInput!]! = [], take: Int, skip: Int! = 0): [MoneyAmount!]
   moneyAmountsCount(where: MoneyAmountWhereInput! = {}): Int
-  customerGroups(
-    where: CustomerGroupWhereInput! = {}
-    orderBy: [CustomerGroupOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [CustomerGroup!]
+  customerGroups(where: CustomerGroupWhereInput! = {}, orderBy: [CustomerGroupOrderByInput!]! = [], take: Int, skip: Int! = 0): [CustomerGroup!]
   customerGroupsCount(where: CustomerGroupWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -5875,76 +5427,26 @@ type Region {
   giftCardsTaxable: Boolean
   automaticTaxes: Boolean
   currency: Currency
-  carts(
-    where: CartWhereInput! = {}
-    orderBy: [CartOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Cart!]
+  carts(where: CartWhereInput! = {}, orderBy: [CartOrderByInput!]! = [], take: Int, skip: Int! = 0): [Cart!]
   cartsCount(where: CartWhereInput! = {}): Int
-  countries(
-    where: CountryWhereInput! = {}
-    orderBy: [CountryOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Country!]
+  countries(where: CountryWhereInput! = {}, orderBy: [CountryOrderByInput!]! = [], take: Int, skip: Int! = 0): [Country!]
   countriesCount(where: CountryWhereInput! = {}): Int
-  discounts(
-    where: DiscountWhereInput! = {}
-    orderBy: [DiscountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Discount!]
+  discounts(where: DiscountWhereInput! = {}, orderBy: [DiscountOrderByInput!]! = [], take: Int, skip: Int! = 0): [Discount!]
   discountsCount(where: DiscountWhereInput! = {}): Int
-  giftCards(
-    where: GiftCardWhereInput! = {}
-    orderBy: [GiftCardOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [GiftCard!]
+  giftCards(where: GiftCardWhereInput! = {}, orderBy: [GiftCardOrderByInput!]! = [], take: Int, skip: Int! = 0): [GiftCard!]
   giftCardsCount(where: GiftCardWhereInput! = {}): Int
-  moneyAmounts(
-    where: MoneyAmountWhereInput! = {}
-    orderBy: [MoneyAmountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [MoneyAmount!]
+  moneyAmounts(where: MoneyAmountWhereInput! = {}, orderBy: [MoneyAmountOrderByInput!]! = [], take: Int, skip: Int! = 0): [MoneyAmount!]
   moneyAmountsCount(where: MoneyAmountWhereInput! = {}): Int
-  orders(
-    where: OrderWhereInput! = {}
-    orderBy: [OrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Order!]
+  orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
   taxProvider: TaxProvider
-  fulfillmentProviders(
-    where: FulfillmentProviderWhereInput! = {}
-    orderBy: [FulfillmentProviderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [FulfillmentProvider!]
+  fulfillmentProviders(where: FulfillmentProviderWhereInput! = {}, orderBy: [FulfillmentProviderOrderByInput!]! = [], take: Int, skip: Int! = 0): [FulfillmentProvider!]
   fulfillmentProvidersCount(where: FulfillmentProviderWhereInput! = {}): Int
-  paymentProviders(
-    where: PaymentProviderWhereInput! = {}
-    orderBy: [PaymentProviderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [PaymentProvider!]
+  paymentProviders(where: PaymentProviderWhereInput! = {}, orderBy: [PaymentProviderOrderByInput!]! = [], take: Int, skip: Int! = 0): [PaymentProvider!]
   paymentProvidersCount(where: PaymentProviderWhereInput! = {}): Int
-  shippingOptions(
-    where: ShippingOptionWhereInput! = {}
-    orderBy: [ShippingOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingOption!]
+  shippingOptions(where: ShippingOptionWhereInput! = {}, orderBy: [ShippingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingOption!]
   shippingOptionsCount(where: ShippingOptionWhereInput! = {}): Int
-  taxRates(
-    where: TaxRateWhereInput! = {}
-    orderBy: [TaxRateOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TaxRate!]
+  taxRates(where: TaxRateWhereInput! = {}, orderBy: [TaxRateOrderByInput!]! = [], take: Int, skip: Int! = 0): [TaxRate!]
   taxRatesCount(where: TaxRateWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -6119,12 +5621,7 @@ type Return {
   claimOrder: ClaimOrder
   swap: Swap
   order: Order
-  returnItems(
-    where: ReturnItemWhereInput! = {}
-    orderBy: [ReturnItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ReturnItem!]
+  returnItems(where: ReturnItemWhereInput! = {}, orderBy: [ReturnItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [ReturnItem!]
   returnItemsCount(where: ReturnItemWhereInput! = {}): Int
   shippingMethod: ShippingMethod
   createdAt: DateTime
@@ -6327,12 +5824,7 @@ type ReturnReason {
   description: String
   metadata: JSON
   parentReturnReason: ReturnReason
-  returnItems(
-    where: ReturnItemWhereInput! = {}
-    orderBy: [ReturnItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ReturnItem!]
+  returnItems(where: ReturnItemWhereInput! = {}, orderBy: [ReturnItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [ReturnItem!]
   returnItemsCount(where: ReturnItemWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -6403,12 +5895,7 @@ type ShippingMethod {
   cart: Cart
   swap: Swap
   shippingOption: ShippingOption
-  shippingMethodTaxLines(
-    where: ShippingMethodTaxLineWhereInput! = {}
-    orderBy: [ShippingMethodTaxLineOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingMethodTaxLine!]
+  shippingMethodTaxLines(where: ShippingMethodTaxLineWhereInput! = {}, orderBy: [ShippingMethodTaxLineOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingMethodTaxLine!]
   shippingMethodTaxLinesCount(where: ShippingMethodTaxLineWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -6567,35 +6054,13 @@ type ShippingOption {
   region: Region
   fulfillmentProvider: FulfillmentProvider
   shippingProfile: ShippingProfile
-  customShippingOptions(
-    where: CustomShippingOptionWhereInput! = {}
-    orderBy: [CustomShippingOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [CustomShippingOption!]
+  customShippingOptions(where: CustomShippingOptionWhereInput! = {}, orderBy: [CustomShippingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [CustomShippingOption!]
   customShippingOptionsCount(where: CustomShippingOptionWhereInput! = {}): Int
-  shippingMethods(
-    where: ShippingMethodWhereInput! = {}
-    orderBy: [ShippingMethodOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingMethod!]
+  shippingMethods(where: ShippingMethodWhereInput! = {}, orderBy: [ShippingMethodOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingMethod!]
   shippingMethodsCount(where: ShippingMethodWhereInput! = {}): Int
-  shippingOptionRequirements(
-    where: ShippingOptionRequirementWhereInput! = {}
-    orderBy: [ShippingOptionRequirementOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingOptionRequirement!]
-  shippingOptionRequirementsCount(
-    where: ShippingOptionRequirementWhereInput! = {}
-  ): Int
-  taxRates(
-    where: TaxRateWhereInput! = {}
-    orderBy: [TaxRateOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TaxRate!]
+  shippingOptionRequirements(where: ShippingOptionRequirementWhereInput! = {}, orderBy: [ShippingOptionRequirementOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingOptionRequirement!]
+  shippingOptionRequirementsCount(where: ShippingOptionRequirementWhereInput! = {}): Int
+  taxRates(where: TaxRateWhereInput! = {}, orderBy: [TaxRateOrderByInput!]! = [], take: Int, skip: Int! = 0): [TaxRate!]
   taxRatesCount(where: TaxRateWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -6781,19 +6246,9 @@ type ShippingProfile {
   name: String
   type: ShippingProfileTypeType
   metadata: JSON
-  products(
-    where: ProductWhereInput! = {}
-    orderBy: [ProductOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Product!]
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
-  shippingOptions(
-    where: ShippingOptionWhereInput! = {}
-    orderBy: [ShippingOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingOption!]
+  shippingOptions(where: ShippingOptionWhereInput! = {}, orderBy: [ShippingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingOption!]
   shippingOptionsCount(where: ShippingOptionWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -6948,28 +6403,13 @@ type Swap {
   cart: Cart
   order: Order
   address: Address
-  lineItems(
-    where: LineItemWhereInput! = {}
-    orderBy: [LineItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItem!]
+  lineItems(where: LineItemWhereInput! = {}, orderBy: [LineItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItem!]
   lineItemsCount(where: LineItemWhereInput! = {}): Int
-  fulfillments(
-    where: FulfillmentWhereInput! = {}
-    orderBy: [FulfillmentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Fulfillment!]
+  fulfillments(where: FulfillmentWhereInput! = {}, orderBy: [FulfillmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fulfillment!]
   fulfillmentsCount(where: FulfillmentWhereInput! = {}): Int
   payment: Payment
   return: Return
-  shippingMethods(
-    where: ShippingMethodWhereInput! = {}
-    orderBy: [ShippingMethodOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingMethod!]
+  shippingMethods(where: ShippingMethodWhereInput! = {}, orderBy: [ShippingMethodOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingMethod!]
   shippingMethodsCount(where: ShippingMethodWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -7105,12 +6545,7 @@ input SwapCreateInput {
 type TaxProvider {
   id: ID!
   isInstalled: Boolean
-  regions(
-    where: RegionWhereInput! = {}
-    orderBy: [RegionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Region!]
+  regions(where: RegionWhereInput! = {}, orderBy: [RegionOrderByInput!]! = [], take: Int, skip: Int! = 0): [Region!]
   regionsCount(where: RegionWhereInput! = {}): Int
 }
 
@@ -7153,27 +6588,12 @@ type TaxRate {
   code: String
   name: String
   metadata: JSON
-  region: Region
-  products(
-    where: ProductWhereInput! = {}
-    orderBy: [ProductOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Product!]
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
-  productTypes(
-    where: ProductTypeWhereInput! = {}
-    orderBy: [ProductTypeOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductType!]
+  productTypes(where: ProductTypeWhereInput! = {}, orderBy: [ProductTypeOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductType!]
   productTypesCount(where: ProductTypeWhereInput! = {}): Int
-  shippingOptions(
-    where: ShippingOptionWhereInput! = {}
-    orderBy: [ShippingOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingOption!]
+  region: Region
+  shippingOptions(where: ShippingOptionWhereInput! = {}, orderBy: [ShippingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingOption!]
   shippingOptionsCount(where: ShippingOptionWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -7191,9 +6611,9 @@ input TaxRateWhereInput {
   rate: FloatNullableFilter
   code: StringFilter
   name: StringFilter
-  region: RegionWhereInput
   products: ProductManyRelationFilter
   productTypes: ProductTypeManyRelationFilter
+  region: RegionWhereInput
   shippingOptions: ShippingOptionManyRelationFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
@@ -7213,9 +6633,9 @@ input TaxRateUpdateInput {
   code: String
   name: String
   metadata: JSON
-  region: RegionRelateToOneForUpdateInput
   products: ProductRelateToManyForUpdateInput
   productTypes: ProductTypeRelateToManyForUpdateInput
+  region: RegionRelateToOneForUpdateInput
   shippingOptions: ShippingOptionRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -7231,9 +6651,9 @@ input TaxRateCreateInput {
   code: String
   name: String
   metadata: JSON
-  region: RegionRelateToOneForCreateInput
   products: ProductRelateToManyForCreateInput
   productTypes: ProductTypeRelateToManyForCreateInput
+  region: RegionRelateToOneForCreateInput
   shippingOptions: ShippingOptionRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -7304,10 +6724,7 @@ input TrackingLinkCreateInput {
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
-scalar JSON
-  @specifiedBy(
-    url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf"
-  )
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
 type Mutation {
   createUser(data: UserCreateInput!): User
@@ -7330,124 +6747,67 @@ type Mutation {
   deleteOrders(where: [OrderWhereUniqueInput!]!): [Order]
   createLineItem(data: LineItemCreateInput!): LineItem
   createLineItems(data: [LineItemCreateInput!]!): [LineItem]
-  updateLineItem(
-    where: LineItemWhereUniqueInput!
-    data: LineItemUpdateInput!
-  ): LineItem
+  updateLineItem(where: LineItemWhereUniqueInput!, data: LineItemUpdateInput!): LineItem
   updateLineItems(data: [LineItemUpdateArgs!]!): [LineItem]
   deleteLineItem(where: LineItemWhereUniqueInput!): LineItem
   deleteLineItems(where: [LineItemWhereUniqueInput!]!): [LineItem]
   createProduct(data: ProductCreateInput!): Product
   createProducts(data: [ProductCreateInput!]!): [Product]
-  updateProduct(
-    where: ProductWhereUniqueInput!
-    data: ProductUpdateInput!
-  ): Product
+  updateProduct(where: ProductWhereUniqueInput!, data: ProductUpdateInput!): Product
   updateProducts(data: [ProductUpdateArgs!]!): [Product]
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteProducts(where: [ProductWhereUniqueInput!]!): [Product]
-  createProductCollection(
-    data: ProductCollectionCreateInput!
-  ): ProductCollection
-  createProductCollections(
-    data: [ProductCollectionCreateInput!]!
-  ): [ProductCollection]
-  updateProductCollection(
-    where: ProductCollectionWhereUniqueInput!
-    data: ProductCollectionUpdateInput!
-  ): ProductCollection
-  updateProductCollections(
-    data: [ProductCollectionUpdateArgs!]!
-  ): [ProductCollection]
-  deleteProductCollection(
-    where: ProductCollectionWhereUniqueInput!
-  ): ProductCollection
-  deleteProductCollections(
-    where: [ProductCollectionWhereUniqueInput!]!
-  ): [ProductCollection]
+  createProductCollection(data: ProductCollectionCreateInput!): ProductCollection
+  createProductCollections(data: [ProductCollectionCreateInput!]!): [ProductCollection]
+  updateProductCollection(where: ProductCollectionWhereUniqueInput!, data: ProductCollectionUpdateInput!): ProductCollection
+  updateProductCollections(data: [ProductCollectionUpdateArgs!]!): [ProductCollection]
+  deleteProductCollection(where: ProductCollectionWhereUniqueInput!): ProductCollection
+  deleteProductCollections(where: [ProductCollectionWhereUniqueInput!]!): [ProductCollection]
   createProductImage(data: ProductImageCreateInput!): ProductImage
   createProductImages(data: [ProductImageCreateInput!]!): [ProductImage]
-  updateProductImage(
-    where: ProductImageWhereUniqueInput!
-    data: ProductImageUpdateInput!
-  ): ProductImage
+  updateProductImage(where: ProductImageWhereUniqueInput!, data: ProductImageUpdateInput!): ProductImage
   updateProductImages(data: [ProductImageUpdateArgs!]!): [ProductImage]
   deleteProductImage(where: ProductImageWhereUniqueInput!): ProductImage
   deleteProductImages(where: [ProductImageWhereUniqueInput!]!): [ProductImage]
   createProductOption(data: ProductOptionCreateInput!): ProductOption
   createProductOptions(data: [ProductOptionCreateInput!]!): [ProductOption]
-  updateProductOption(
-    where: ProductOptionWhereUniqueInput!
-    data: ProductOptionUpdateInput!
-  ): ProductOption
+  updateProductOption(where: ProductOptionWhereUniqueInput!, data: ProductOptionUpdateInput!): ProductOption
   updateProductOptions(data: [ProductOptionUpdateArgs!]!): [ProductOption]
   deleteProductOption(where: ProductOptionWhereUniqueInput!): ProductOption
-  deleteProductOptions(
-    where: [ProductOptionWhereUniqueInput!]!
-  ): [ProductOption]
-  createProductOptionValue(
-    data: ProductOptionValueCreateInput!
-  ): ProductOptionValue
-  createProductOptionValues(
-    data: [ProductOptionValueCreateInput!]!
-  ): [ProductOptionValue]
-  updateProductOptionValue(
-    where: ProductOptionValueWhereUniqueInput!
-    data: ProductOptionValueUpdateInput!
-  ): ProductOptionValue
-  updateProductOptionValues(
-    data: [ProductOptionValueUpdateArgs!]!
-  ): [ProductOptionValue]
-  deleteProductOptionValue(
-    where: ProductOptionValueWhereUniqueInput!
-  ): ProductOptionValue
-  deleteProductOptionValues(
-    where: [ProductOptionValueWhereUniqueInput!]!
-  ): [ProductOptionValue]
+  deleteProductOptions(where: [ProductOptionWhereUniqueInput!]!): [ProductOption]
+  createProductOptionValue(data: ProductOptionValueCreateInput!): ProductOptionValue
+  createProductOptionValues(data: [ProductOptionValueCreateInput!]!): [ProductOptionValue]
+  updateProductOptionValue(where: ProductOptionValueWhereUniqueInput!, data: ProductOptionValueUpdateInput!): ProductOptionValue
+  updateProductOptionValues(data: [ProductOptionValueUpdateArgs!]!): [ProductOptionValue]
+  deleteProductOptionValue(where: ProductOptionValueWhereUniqueInput!): ProductOptionValue
+  deleteProductOptionValues(where: [ProductOptionValueWhereUniqueInput!]!): [ProductOptionValue]
   createProductTag(data: ProductTagCreateInput!): ProductTag
   createProductTags(data: [ProductTagCreateInput!]!): [ProductTag]
-  updateProductTag(
-    where: ProductTagWhereUniqueInput!
-    data: ProductTagUpdateInput!
-  ): ProductTag
+  updateProductTag(where: ProductTagWhereUniqueInput!, data: ProductTagUpdateInput!): ProductTag
   updateProductTags(data: [ProductTagUpdateArgs!]!): [ProductTag]
   deleteProductTag(where: ProductTagWhereUniqueInput!): ProductTag
   deleteProductTags(where: [ProductTagWhereUniqueInput!]!): [ProductTag]
   createProductType(data: ProductTypeCreateInput!): ProductType
   createProductTypes(data: [ProductTypeCreateInput!]!): [ProductType]
-  updateProductType(
-    where: ProductTypeWhereUniqueInput!
-    data: ProductTypeUpdateInput!
-  ): ProductType
+  updateProductType(where: ProductTypeWhereUniqueInput!, data: ProductTypeUpdateInput!): ProductType
   updateProductTypes(data: [ProductTypeUpdateArgs!]!): [ProductType]
   deleteProductType(where: ProductTypeWhereUniqueInput!): ProductType
   deleteProductTypes(where: [ProductTypeWhereUniqueInput!]!): [ProductType]
   createProductVariant(data: ProductVariantCreateInput!): ProductVariant
   createProductVariants(data: [ProductVariantCreateInput!]!): [ProductVariant]
-  updateProductVariant(
-    where: ProductVariantWhereUniqueInput!
-    data: ProductVariantUpdateInput!
-  ): ProductVariant
+  updateProductVariant(where: ProductVariantWhereUniqueInput!, data: ProductVariantUpdateInput!): ProductVariant
   updateProductVariants(data: [ProductVariantUpdateArgs!]!): [ProductVariant]
   deleteProductVariant(where: ProductVariantWhereUniqueInput!): ProductVariant
-  deleteProductVariants(
-    where: [ProductVariantWhereUniqueInput!]!
-  ): [ProductVariant]
+  deleteProductVariants(where: [ProductVariantWhereUniqueInput!]!): [ProductVariant]
   createPayment(data: PaymentCreateInput!): Payment
   createPayments(data: [PaymentCreateInput!]!): [Payment]
-  updatePayment(
-    where: PaymentWhereUniqueInput!
-    data: PaymentUpdateInput!
-  ): Payment
+  updatePayment(where: PaymentWhereUniqueInput!, data: PaymentUpdateInput!): Payment
   updatePayments(data: [PaymentUpdateArgs!]!): [Payment]
   deletePayment(where: PaymentWhereUniqueInput!): Payment
   deletePayments(where: [PaymentWhereUniqueInput!]!): [Payment]
   createAddress(data: AddressCreateInput!): Address
   createAddresses(data: [AddressCreateInput!]!): [Address]
-  updateAddress(
-    where: AddressWhereUniqueInput!
-    data: AddressUpdateInput!
-  ): Address
+  updateAddress(where: AddressWhereUniqueInput!, data: AddressUpdateInput!): Address
   updateAddresses(data: [AddressUpdateArgs!]!): [Address]
   deleteAddress(where: AddressWhereUniqueInput!): Address
   deleteAddresses(where: [AddressWhereUniqueInput!]!): [Address]
@@ -7465,271 +6825,139 @@ type Mutation {
   deleteApiKeys(where: [ApiKeyWhereUniqueInput!]!): [ApiKey]
   createClaimOrder(data: ClaimOrderCreateInput!): ClaimOrder
   createClaimOrders(data: [ClaimOrderCreateInput!]!): [ClaimOrder]
-  updateClaimOrder(
-    where: ClaimOrderWhereUniqueInput!
-    data: ClaimOrderUpdateInput!
-  ): ClaimOrder
+  updateClaimOrder(where: ClaimOrderWhereUniqueInput!, data: ClaimOrderUpdateInput!): ClaimOrder
   updateClaimOrders(data: [ClaimOrderUpdateArgs!]!): [ClaimOrder]
   deleteClaimOrder(where: ClaimOrderWhereUniqueInput!): ClaimOrder
   deleteClaimOrders(where: [ClaimOrderWhereUniqueInput!]!): [ClaimOrder]
   createClaimItem(data: ClaimItemCreateInput!): ClaimItem
   createClaimItems(data: [ClaimItemCreateInput!]!): [ClaimItem]
-  updateClaimItem(
-    where: ClaimItemWhereUniqueInput!
-    data: ClaimItemUpdateInput!
-  ): ClaimItem
+  updateClaimItem(where: ClaimItemWhereUniqueInput!, data: ClaimItemUpdateInput!): ClaimItem
   updateClaimItems(data: [ClaimItemUpdateArgs!]!): [ClaimItem]
   deleteClaimItem(where: ClaimItemWhereUniqueInput!): ClaimItem
   deleteClaimItems(where: [ClaimItemWhereUniqueInput!]!): [ClaimItem]
   createClaimImage(data: ClaimImageCreateInput!): ClaimImage
   createClaimImages(data: [ClaimImageCreateInput!]!): [ClaimImage]
-  updateClaimImage(
-    where: ClaimImageWhereUniqueInput!
-    data: ClaimImageUpdateInput!
-  ): ClaimImage
+  updateClaimImage(where: ClaimImageWhereUniqueInput!, data: ClaimImageUpdateInput!): ClaimImage
   updateClaimImages(data: [ClaimImageUpdateArgs!]!): [ClaimImage]
   deleteClaimImage(where: ClaimImageWhereUniqueInput!): ClaimImage
   deleteClaimImages(where: [ClaimImageWhereUniqueInput!]!): [ClaimImage]
   createClaimTag(data: ClaimTagCreateInput!): ClaimTag
   createClaimTags(data: [ClaimTagCreateInput!]!): [ClaimTag]
-  updateClaimTag(
-    where: ClaimTagWhereUniqueInput!
-    data: ClaimTagUpdateInput!
-  ): ClaimTag
+  updateClaimTag(where: ClaimTagWhereUniqueInput!, data: ClaimTagUpdateInput!): ClaimTag
   updateClaimTags(data: [ClaimTagUpdateArgs!]!): [ClaimTag]
   deleteClaimTag(where: ClaimTagWhereUniqueInput!): ClaimTag
   deleteClaimTags(where: [ClaimTagWhereUniqueInput!]!): [ClaimTag]
   createCountry(data: CountryCreateInput!): Country
   createCountries(data: [CountryCreateInput!]!): [Country]
-  updateCountry(
-    where: CountryWhereUniqueInput!
-    data: CountryUpdateInput!
-  ): Country
+  updateCountry(where: CountryWhereUniqueInput!, data: CountryUpdateInput!): Country
   updateCountries(data: [CountryUpdateArgs!]!): [Country]
   deleteCountry(where: CountryWhereUniqueInput!): Country
   deleteCountries(where: [CountryWhereUniqueInput!]!): [Country]
   createCurrency(data: CurrencyCreateInput!): Currency
   createCurrencies(data: [CurrencyCreateInput!]!): [Currency]
-  updateCurrency(
-    where: CurrencyWhereUniqueInput!
-    data: CurrencyUpdateInput!
-  ): Currency
+  updateCurrency(where: CurrencyWhereUniqueInput!, data: CurrencyUpdateInput!): Currency
   updateCurrencies(data: [CurrencyUpdateArgs!]!): [Currency]
   deleteCurrency(where: CurrencyWhereUniqueInput!): Currency
   deleteCurrencies(where: [CurrencyWhereUniqueInput!]!): [Currency]
   createCustomer(data: CustomerCreateInput!): Customer
   createCustomers(data: [CustomerCreateInput!]!): [Customer]
-  updateCustomer(
-    where: CustomerWhereUniqueInput!
-    data: CustomerUpdateInput!
-  ): Customer
+  updateCustomer(where: CustomerWhereUniqueInput!, data: CustomerUpdateInput!): Customer
   updateCustomers(data: [CustomerUpdateArgs!]!): [Customer]
   deleteCustomer(where: CustomerWhereUniqueInput!): Customer
   deleteCustomers(where: [CustomerWhereUniqueInput!]!): [Customer]
   createCustomerGroup(data: CustomerGroupCreateInput!): CustomerGroup
   createCustomerGroups(data: [CustomerGroupCreateInput!]!): [CustomerGroup]
-  updateCustomerGroup(
-    where: CustomerGroupWhereUniqueInput!
-    data: CustomerGroupUpdateInput!
-  ): CustomerGroup
+  updateCustomerGroup(where: CustomerGroupWhereUniqueInput!, data: CustomerGroupUpdateInput!): CustomerGroup
   updateCustomerGroups(data: [CustomerGroupUpdateArgs!]!): [CustomerGroup]
   deleteCustomerGroup(where: CustomerGroupWhereUniqueInput!): CustomerGroup
-  deleteCustomerGroups(
-    where: [CustomerGroupWhereUniqueInput!]!
-  ): [CustomerGroup]
-  createCustomShippingOption(
-    data: CustomShippingOptionCreateInput!
-  ): CustomShippingOption
-  createCustomShippingOptions(
-    data: [CustomShippingOptionCreateInput!]!
-  ): [CustomShippingOption]
-  updateCustomShippingOption(
-    where: CustomShippingOptionWhereUniqueInput!
-    data: CustomShippingOptionUpdateInput!
-  ): CustomShippingOption
-  updateCustomShippingOptions(
-    data: [CustomShippingOptionUpdateArgs!]!
-  ): [CustomShippingOption]
-  deleteCustomShippingOption(
-    where: CustomShippingOptionWhereUniqueInput!
-  ): CustomShippingOption
-  deleteCustomShippingOptions(
-    where: [CustomShippingOptionWhereUniqueInput!]!
-  ): [CustomShippingOption]
+  deleteCustomerGroups(where: [CustomerGroupWhereUniqueInput!]!): [CustomerGroup]
+  createCustomShippingOption(data: CustomShippingOptionCreateInput!): CustomShippingOption
+  createCustomShippingOptions(data: [CustomShippingOptionCreateInput!]!): [CustomShippingOption]
+  updateCustomShippingOption(where: CustomShippingOptionWhereUniqueInput!, data: CustomShippingOptionUpdateInput!): CustomShippingOption
+  updateCustomShippingOptions(data: [CustomShippingOptionUpdateArgs!]!): [CustomShippingOption]
+  deleteCustomShippingOption(where: CustomShippingOptionWhereUniqueInput!): CustomShippingOption
+  deleteCustomShippingOptions(where: [CustomShippingOptionWhereUniqueInput!]!): [CustomShippingOption]
   createDiscount(data: DiscountCreateInput!): Discount
   createDiscounts(data: [DiscountCreateInput!]!): [Discount]
-  updateDiscount(
-    where: DiscountWhereUniqueInput!
-    data: DiscountUpdateInput!
-  ): Discount
+  updateDiscount(where: DiscountWhereUniqueInput!, data: DiscountUpdateInput!): Discount
   updateDiscounts(data: [DiscountUpdateArgs!]!): [Discount]
   deleteDiscount(where: DiscountWhereUniqueInput!): Discount
   deleteDiscounts(where: [DiscountWhereUniqueInput!]!): [Discount]
-  createDiscountCondition(
-    data: DiscountConditionCreateInput!
-  ): DiscountCondition
-  createDiscountConditions(
-    data: [DiscountConditionCreateInput!]!
-  ): [DiscountCondition]
-  updateDiscountCondition(
-    where: DiscountConditionWhereUniqueInput!
-    data: DiscountConditionUpdateInput!
-  ): DiscountCondition
-  updateDiscountConditions(
-    data: [DiscountConditionUpdateArgs!]!
-  ): [DiscountCondition]
-  deleteDiscountCondition(
-    where: DiscountConditionWhereUniqueInput!
-  ): DiscountCondition
-  deleteDiscountConditions(
-    where: [DiscountConditionWhereUniqueInput!]!
-  ): [DiscountCondition]
+  createDiscountCondition(data: DiscountConditionCreateInput!): DiscountCondition
+  createDiscountConditions(data: [DiscountConditionCreateInput!]!): [DiscountCondition]
+  updateDiscountCondition(where: DiscountConditionWhereUniqueInput!, data: DiscountConditionUpdateInput!): DiscountCondition
+  updateDiscountConditions(data: [DiscountConditionUpdateArgs!]!): [DiscountCondition]
+  deleteDiscountCondition(where: DiscountConditionWhereUniqueInput!): DiscountCondition
+  deleteDiscountConditions(where: [DiscountConditionWhereUniqueInput!]!): [DiscountCondition]
   createDiscountRule(data: DiscountRuleCreateInput!): DiscountRule
   createDiscountRules(data: [DiscountRuleCreateInput!]!): [DiscountRule]
-  updateDiscountRule(
-    where: DiscountRuleWhereUniqueInput!
-    data: DiscountRuleUpdateInput!
-  ): DiscountRule
+  updateDiscountRule(where: DiscountRuleWhereUniqueInput!, data: DiscountRuleUpdateInput!): DiscountRule
   updateDiscountRules(data: [DiscountRuleUpdateArgs!]!): [DiscountRule]
   deleteDiscountRule(where: DiscountRuleWhereUniqueInput!): DiscountRule
   deleteDiscountRules(where: [DiscountRuleWhereUniqueInput!]!): [DiscountRule]
   createDraftOrder(data: DraftOrderCreateInput!): DraftOrder
   createDraftOrders(data: [DraftOrderCreateInput!]!): [DraftOrder]
-  updateDraftOrder(
-    where: DraftOrderWhereUniqueInput!
-    data: DraftOrderUpdateInput!
-  ): DraftOrder
+  updateDraftOrder(where: DraftOrderWhereUniqueInput!, data: DraftOrderUpdateInput!): DraftOrder
   updateDraftOrders(data: [DraftOrderUpdateArgs!]!): [DraftOrder]
   deleteDraftOrder(where: DraftOrderWhereUniqueInput!): DraftOrder
   deleteDraftOrders(where: [DraftOrderWhereUniqueInput!]!): [DraftOrder]
   createFulfillment(data: FulfillmentCreateInput!): Fulfillment
   createFulfillments(data: [FulfillmentCreateInput!]!): [Fulfillment]
-  updateFulfillment(
-    where: FulfillmentWhereUniqueInput!
-    data: FulfillmentUpdateInput!
-  ): Fulfillment
+  updateFulfillment(where: FulfillmentWhereUniqueInput!, data: FulfillmentUpdateInput!): Fulfillment
   updateFulfillments(data: [FulfillmentUpdateArgs!]!): [Fulfillment]
   deleteFulfillment(where: FulfillmentWhereUniqueInput!): Fulfillment
   deleteFulfillments(where: [FulfillmentWhereUniqueInput!]!): [Fulfillment]
   createFulfillmentItem(data: FulfillmentItemCreateInput!): FulfillmentItem
-  createFulfillmentItems(
-    data: [FulfillmentItemCreateInput!]!
-  ): [FulfillmentItem]
-  updateFulfillmentItem(
-    where: FulfillmentItemWhereUniqueInput!
-    data: FulfillmentItemUpdateInput!
-  ): FulfillmentItem
+  createFulfillmentItems(data: [FulfillmentItemCreateInput!]!): [FulfillmentItem]
+  updateFulfillmentItem(where: FulfillmentItemWhereUniqueInput!, data: FulfillmentItemUpdateInput!): FulfillmentItem
   updateFulfillmentItems(data: [FulfillmentItemUpdateArgs!]!): [FulfillmentItem]
-  deleteFulfillmentItem(
-    where: FulfillmentItemWhereUniqueInput!
-  ): FulfillmentItem
-  deleteFulfillmentItems(
-    where: [FulfillmentItemWhereUniqueInput!]!
-  ): [FulfillmentItem]
-  createFulfillmentProvider(
-    data: FulfillmentProviderCreateInput!
-  ): FulfillmentProvider
-  createFulfillmentProviders(
-    data: [FulfillmentProviderCreateInput!]!
-  ): [FulfillmentProvider]
-  updateFulfillmentProvider(
-    where: FulfillmentProviderWhereUniqueInput!
-    data: FulfillmentProviderUpdateInput!
-  ): FulfillmentProvider
-  updateFulfillmentProviders(
-    data: [FulfillmentProviderUpdateArgs!]!
-  ): [FulfillmentProvider]
-  deleteFulfillmentProvider(
-    where: FulfillmentProviderWhereUniqueInput!
-  ): FulfillmentProvider
-  deleteFulfillmentProviders(
-    where: [FulfillmentProviderWhereUniqueInput!]!
-  ): [FulfillmentProvider]
+  deleteFulfillmentItem(where: FulfillmentItemWhereUniqueInput!): FulfillmentItem
+  deleteFulfillmentItems(where: [FulfillmentItemWhereUniqueInput!]!): [FulfillmentItem]
+  createFulfillmentProvider(data: FulfillmentProviderCreateInput!): FulfillmentProvider
+  createFulfillmentProviders(data: [FulfillmentProviderCreateInput!]!): [FulfillmentProvider]
+  updateFulfillmentProvider(where: FulfillmentProviderWhereUniqueInput!, data: FulfillmentProviderUpdateInput!): FulfillmentProvider
+  updateFulfillmentProviders(data: [FulfillmentProviderUpdateArgs!]!): [FulfillmentProvider]
+  deleteFulfillmentProvider(where: FulfillmentProviderWhereUniqueInput!): FulfillmentProvider
+  deleteFulfillmentProviders(where: [FulfillmentProviderWhereUniqueInput!]!): [FulfillmentProvider]
   createGiftCard(data: GiftCardCreateInput!): GiftCard
   createGiftCards(data: [GiftCardCreateInput!]!): [GiftCard]
-  updateGiftCard(
-    where: GiftCardWhereUniqueInput!
-    data: GiftCardUpdateInput!
-  ): GiftCard
+  updateGiftCard(where: GiftCardWhereUniqueInput!, data: GiftCardUpdateInput!): GiftCard
   updateGiftCards(data: [GiftCardUpdateArgs!]!): [GiftCard]
   deleteGiftCard(where: GiftCardWhereUniqueInput!): GiftCard
   deleteGiftCards(where: [GiftCardWhereUniqueInput!]!): [GiftCard]
-  createGiftCardTransaction(
-    data: GiftCardTransactionCreateInput!
-  ): GiftCardTransaction
-  createGiftCardTransactions(
-    data: [GiftCardTransactionCreateInput!]!
-  ): [GiftCardTransaction]
-  updateGiftCardTransaction(
-    where: GiftCardTransactionWhereUniqueInput!
-    data: GiftCardTransactionUpdateInput!
-  ): GiftCardTransaction
-  updateGiftCardTransactions(
-    data: [GiftCardTransactionUpdateArgs!]!
-  ): [GiftCardTransaction]
-  deleteGiftCardTransaction(
-    where: GiftCardTransactionWhereUniqueInput!
-  ): GiftCardTransaction
-  deleteGiftCardTransactions(
-    where: [GiftCardTransactionWhereUniqueInput!]!
-  ): [GiftCardTransaction]
+  createGiftCardTransaction(data: GiftCardTransactionCreateInput!): GiftCardTransaction
+  createGiftCardTransactions(data: [GiftCardTransactionCreateInput!]!): [GiftCardTransaction]
+  updateGiftCardTransaction(where: GiftCardTransactionWhereUniqueInput!, data: GiftCardTransactionUpdateInput!): GiftCardTransaction
+  updateGiftCardTransactions(data: [GiftCardTransactionUpdateArgs!]!): [GiftCardTransaction]
+  deleteGiftCardTransaction(where: GiftCardTransactionWhereUniqueInput!): GiftCardTransaction
+  deleteGiftCardTransactions(where: [GiftCardTransactionWhereUniqueInput!]!): [GiftCardTransaction]
   createIdempotencyKey(data: IdempotencyKeyCreateInput!): IdempotencyKey
   createIdempotencyKeys(data: [IdempotencyKeyCreateInput!]!): [IdempotencyKey]
-  updateIdempotencyKey(
-    where: IdempotencyKeyWhereUniqueInput!
-    data: IdempotencyKeyUpdateInput!
-  ): IdempotencyKey
+  updateIdempotencyKey(where: IdempotencyKeyWhereUniqueInput!, data: IdempotencyKeyUpdateInput!): IdempotencyKey
   updateIdempotencyKeys(data: [IdempotencyKeyUpdateArgs!]!): [IdempotencyKey]
   deleteIdempotencyKey(where: IdempotencyKeyWhereUniqueInput!): IdempotencyKey
-  deleteIdempotencyKeys(
-    where: [IdempotencyKeyWhereUniqueInput!]!
-  ): [IdempotencyKey]
+  deleteIdempotencyKeys(where: [IdempotencyKeyWhereUniqueInput!]!): [IdempotencyKey]
   createInvite(data: InviteCreateInput!): Invite
   createInvites(data: [InviteCreateInput!]!): [Invite]
   updateInvite(where: InviteWhereUniqueInput!, data: InviteUpdateInput!): Invite
   updateInvites(data: [InviteUpdateArgs!]!): [Invite]
   deleteInvite(where: InviteWhereUniqueInput!): Invite
   deleteInvites(where: [InviteWhereUniqueInput!]!): [Invite]
-  createLineItemAdjustment(
-    data: LineItemAdjustmentCreateInput!
-  ): LineItemAdjustment
-  createLineItemAdjustments(
-    data: [LineItemAdjustmentCreateInput!]!
-  ): [LineItemAdjustment]
-  updateLineItemAdjustment(
-    where: LineItemAdjustmentWhereUniqueInput!
-    data: LineItemAdjustmentUpdateInput!
-  ): LineItemAdjustment
-  updateLineItemAdjustments(
-    data: [LineItemAdjustmentUpdateArgs!]!
-  ): [LineItemAdjustment]
-  deleteLineItemAdjustment(
-    where: LineItemAdjustmentWhereUniqueInput!
-  ): LineItemAdjustment
-  deleteLineItemAdjustments(
-    where: [LineItemAdjustmentWhereUniqueInput!]!
-  ): [LineItemAdjustment]
+  createLineItemAdjustment(data: LineItemAdjustmentCreateInput!): LineItemAdjustment
+  createLineItemAdjustments(data: [LineItemAdjustmentCreateInput!]!): [LineItemAdjustment]
+  updateLineItemAdjustment(where: LineItemAdjustmentWhereUniqueInput!, data: LineItemAdjustmentUpdateInput!): LineItemAdjustment
+  updateLineItemAdjustments(data: [LineItemAdjustmentUpdateArgs!]!): [LineItemAdjustment]
+  deleteLineItemAdjustment(where: LineItemAdjustmentWhereUniqueInput!): LineItemAdjustment
+  deleteLineItemAdjustments(where: [LineItemAdjustmentWhereUniqueInput!]!): [LineItemAdjustment]
   createLineItemTaxLine(data: LineItemTaxLineCreateInput!): LineItemTaxLine
-  createLineItemTaxLines(
-    data: [LineItemTaxLineCreateInput!]!
-  ): [LineItemTaxLine]
-  updateLineItemTaxLine(
-    where: LineItemTaxLineWhereUniqueInput!
-    data: LineItemTaxLineUpdateInput!
-  ): LineItemTaxLine
+  createLineItemTaxLines(data: [LineItemTaxLineCreateInput!]!): [LineItemTaxLine]
+  updateLineItemTaxLine(where: LineItemTaxLineWhereUniqueInput!, data: LineItemTaxLineUpdateInput!): LineItemTaxLine
   updateLineItemTaxLines(data: [LineItemTaxLineUpdateArgs!]!): [LineItemTaxLine]
-  deleteLineItemTaxLine(
-    where: LineItemTaxLineWhereUniqueInput!
-  ): LineItemTaxLine
-  deleteLineItemTaxLines(
-    where: [LineItemTaxLineWhereUniqueInput!]!
-  ): [LineItemTaxLine]
+  deleteLineItemTaxLine(where: LineItemTaxLineWhereUniqueInput!): LineItemTaxLine
+  deleteLineItemTaxLines(where: [LineItemTaxLineWhereUniqueInput!]!): [LineItemTaxLine]
   createMoneyAmount(data: MoneyAmountCreateInput!): MoneyAmount
   createMoneyAmounts(data: [MoneyAmountCreateInput!]!): [MoneyAmount]
-  updateMoneyAmount(
-    where: MoneyAmountWhereUniqueInput!
-    data: MoneyAmountUpdateInput!
-  ): MoneyAmount
+  updateMoneyAmount(where: MoneyAmountWhereUniqueInput!, data: MoneyAmountUpdateInput!): MoneyAmount
   updateMoneyAmounts(data: [MoneyAmountUpdateArgs!]!): [MoneyAmount]
   deleteMoneyAmount(where: MoneyAmountWhereUniqueInput!): MoneyAmount
   deleteMoneyAmounts(where: [MoneyAmountWhereUniqueInput!]!): [MoneyAmount]
@@ -7741,32 +6969,16 @@ type Mutation {
   deleteNotes(where: [NoteWhereUniqueInput!]!): [Note]
   createNotification(data: NotificationCreateInput!): Notification
   createNotifications(data: [NotificationCreateInput!]!): [Notification]
-  updateNotification(
-    where: NotificationWhereUniqueInput!
-    data: NotificationUpdateInput!
-  ): Notification
+  updateNotification(where: NotificationWhereUniqueInput!, data: NotificationUpdateInput!): Notification
   updateNotifications(data: [NotificationUpdateArgs!]!): [Notification]
   deleteNotification(where: NotificationWhereUniqueInput!): Notification
   deleteNotifications(where: [NotificationWhereUniqueInput!]!): [Notification]
-  createNotificationProvider(
-    data: NotificationProviderCreateInput!
-  ): NotificationProvider
-  createNotificationProviders(
-    data: [NotificationProviderCreateInput!]!
-  ): [NotificationProvider]
-  updateNotificationProvider(
-    where: NotificationProviderWhereUniqueInput!
-    data: NotificationProviderUpdateInput!
-  ): NotificationProvider
-  updateNotificationProviders(
-    data: [NotificationProviderUpdateArgs!]!
-  ): [NotificationProvider]
-  deleteNotificationProvider(
-    where: NotificationProviderWhereUniqueInput!
-  ): NotificationProvider
-  deleteNotificationProviders(
-    where: [NotificationProviderWhereUniqueInput!]!
-  ): [NotificationProvider]
+  createNotificationProvider(data: NotificationProviderCreateInput!): NotificationProvider
+  createNotificationProviders(data: [NotificationProviderCreateInput!]!): [NotificationProvider]
+  updateNotificationProvider(where: NotificationProviderWhereUniqueInput!, data: NotificationProviderUpdateInput!): NotificationProvider
+  updateNotificationProviders(data: [NotificationProviderUpdateArgs!]!): [NotificationProvider]
+  deleteNotificationProvider(where: NotificationProviderWhereUniqueInput!): NotificationProvider
+  deleteNotificationProviders(where: [NotificationProviderWhereUniqueInput!]!): [NotificationProvider]
   createOAuth(data: OAuthCreateInput!): OAuth
   createOAuths(data: [OAuthCreateInput!]!): [OAuth]
   updateOAuth(where: OAuthWhereUniqueInput!, data: OAuthUpdateInput!): OAuth
@@ -7774,37 +6986,20 @@ type Mutation {
   deleteOAuth(where: OAuthWhereUniqueInput!): OAuth
   deleteOAuths(where: [OAuthWhereUniqueInput!]!): [OAuth]
   createPaymentProvider(data: PaymentProviderCreateInput!): PaymentProvider
-  createPaymentProviders(
-    data: [PaymentProviderCreateInput!]!
-  ): [PaymentProvider]
-  updatePaymentProvider(
-    where: PaymentProviderWhereUniqueInput!
-    data: PaymentProviderUpdateInput!
-  ): PaymentProvider
+  createPaymentProviders(data: [PaymentProviderCreateInput!]!): [PaymentProvider]
+  updatePaymentProvider(where: PaymentProviderWhereUniqueInput!, data: PaymentProviderUpdateInput!): PaymentProvider
   updatePaymentProviders(data: [PaymentProviderUpdateArgs!]!): [PaymentProvider]
-  deletePaymentProvider(
-    where: PaymentProviderWhereUniqueInput!
-  ): PaymentProvider
-  deletePaymentProviders(
-    where: [PaymentProviderWhereUniqueInput!]!
-  ): [PaymentProvider]
+  deletePaymentProvider(where: PaymentProviderWhereUniqueInput!): PaymentProvider
+  deletePaymentProviders(where: [PaymentProviderWhereUniqueInput!]!): [PaymentProvider]
   createPaymentSession(data: PaymentSessionCreateInput!): PaymentSession
   createPaymentSessions(data: [PaymentSessionCreateInput!]!): [PaymentSession]
-  updatePaymentSession(
-    where: PaymentSessionWhereUniqueInput!
-    data: PaymentSessionUpdateInput!
-  ): PaymentSession
+  updatePaymentSession(where: PaymentSessionWhereUniqueInput!, data: PaymentSessionUpdateInput!): PaymentSession
   updatePaymentSessions(data: [PaymentSessionUpdateArgs!]!): [PaymentSession]
   deletePaymentSession(where: PaymentSessionWhereUniqueInput!): PaymentSession
-  deletePaymentSessions(
-    where: [PaymentSessionWhereUniqueInput!]!
-  ): [PaymentSession]
+  deletePaymentSessions(where: [PaymentSessionWhereUniqueInput!]!): [PaymentSession]
   createPriceList(data: PriceListCreateInput!): PriceList
   createPriceLists(data: [PriceListCreateInput!]!): [PriceList]
-  updatePriceList(
-    where: PriceListWhereUniqueInput!
-    data: PriceListUpdateInput!
-  ): PriceList
+  updatePriceList(where: PriceListWhereUniqueInput!, data: PriceListUpdateInput!): PriceList
   updatePriceLists(data: [PriceListUpdateArgs!]!): [PriceList]
   deletePriceList(where: PriceListWhereUniqueInput!): PriceList
   deletePriceLists(where: [PriceListWhereUniqueInput!]!): [PriceList]
@@ -7828,97 +7023,46 @@ type Mutation {
   deleteReturns(where: [ReturnWhereUniqueInput!]!): [Return]
   createReturnItem(data: ReturnItemCreateInput!): ReturnItem
   createReturnItems(data: [ReturnItemCreateInput!]!): [ReturnItem]
-  updateReturnItem(
-    where: ReturnItemWhereUniqueInput!
-    data: ReturnItemUpdateInput!
-  ): ReturnItem
+  updateReturnItem(where: ReturnItemWhereUniqueInput!, data: ReturnItemUpdateInput!): ReturnItem
   updateReturnItems(data: [ReturnItemUpdateArgs!]!): [ReturnItem]
   deleteReturnItem(where: ReturnItemWhereUniqueInput!): ReturnItem
   deleteReturnItems(where: [ReturnItemWhereUniqueInput!]!): [ReturnItem]
   createReturnReason(data: ReturnReasonCreateInput!): ReturnReason
   createReturnReasons(data: [ReturnReasonCreateInput!]!): [ReturnReason]
-  updateReturnReason(
-    where: ReturnReasonWhereUniqueInput!
-    data: ReturnReasonUpdateInput!
-  ): ReturnReason
+  updateReturnReason(where: ReturnReasonWhereUniqueInput!, data: ReturnReasonUpdateInput!): ReturnReason
   updateReturnReasons(data: [ReturnReasonUpdateArgs!]!): [ReturnReason]
   deleteReturnReason(where: ReturnReasonWhereUniqueInput!): ReturnReason
   deleteReturnReasons(where: [ReturnReasonWhereUniqueInput!]!): [ReturnReason]
   createShippingMethod(data: ShippingMethodCreateInput!): ShippingMethod
   createShippingMethods(data: [ShippingMethodCreateInput!]!): [ShippingMethod]
-  updateShippingMethod(
-    where: ShippingMethodWhereUniqueInput!
-    data: ShippingMethodUpdateInput!
-  ): ShippingMethod
+  updateShippingMethod(where: ShippingMethodWhereUniqueInput!, data: ShippingMethodUpdateInput!): ShippingMethod
   updateShippingMethods(data: [ShippingMethodUpdateArgs!]!): [ShippingMethod]
   deleteShippingMethod(where: ShippingMethodWhereUniqueInput!): ShippingMethod
-  deleteShippingMethods(
-    where: [ShippingMethodWhereUniqueInput!]!
-  ): [ShippingMethod]
-  createShippingMethodTaxLine(
-    data: ShippingMethodTaxLineCreateInput!
-  ): ShippingMethodTaxLine
-  createShippingMethodTaxLines(
-    data: [ShippingMethodTaxLineCreateInput!]!
-  ): [ShippingMethodTaxLine]
-  updateShippingMethodTaxLine(
-    where: ShippingMethodTaxLineWhereUniqueInput!
-    data: ShippingMethodTaxLineUpdateInput!
-  ): ShippingMethodTaxLine
-  updateShippingMethodTaxLines(
-    data: [ShippingMethodTaxLineUpdateArgs!]!
-  ): [ShippingMethodTaxLine]
-  deleteShippingMethodTaxLine(
-    where: ShippingMethodTaxLineWhereUniqueInput!
-  ): ShippingMethodTaxLine
-  deleteShippingMethodTaxLines(
-    where: [ShippingMethodTaxLineWhereUniqueInput!]!
-  ): [ShippingMethodTaxLine]
+  deleteShippingMethods(where: [ShippingMethodWhereUniqueInput!]!): [ShippingMethod]
+  createShippingMethodTaxLine(data: ShippingMethodTaxLineCreateInput!): ShippingMethodTaxLine
+  createShippingMethodTaxLines(data: [ShippingMethodTaxLineCreateInput!]!): [ShippingMethodTaxLine]
+  updateShippingMethodTaxLine(where: ShippingMethodTaxLineWhereUniqueInput!, data: ShippingMethodTaxLineUpdateInput!): ShippingMethodTaxLine
+  updateShippingMethodTaxLines(data: [ShippingMethodTaxLineUpdateArgs!]!): [ShippingMethodTaxLine]
+  deleteShippingMethodTaxLine(where: ShippingMethodTaxLineWhereUniqueInput!): ShippingMethodTaxLine
+  deleteShippingMethodTaxLines(where: [ShippingMethodTaxLineWhereUniqueInput!]!): [ShippingMethodTaxLine]
   createShippingOption(data: ShippingOptionCreateInput!): ShippingOption
   createShippingOptions(data: [ShippingOptionCreateInput!]!): [ShippingOption]
-  updateShippingOption(
-    where: ShippingOptionWhereUniqueInput!
-    data: ShippingOptionUpdateInput!
-  ): ShippingOption
+  updateShippingOption(where: ShippingOptionWhereUniqueInput!, data: ShippingOptionUpdateInput!): ShippingOption
   updateShippingOptions(data: [ShippingOptionUpdateArgs!]!): [ShippingOption]
   deleteShippingOption(where: ShippingOptionWhereUniqueInput!): ShippingOption
-  deleteShippingOptions(
-    where: [ShippingOptionWhereUniqueInput!]!
-  ): [ShippingOption]
-  createShippingOptionRequirement(
-    data: ShippingOptionRequirementCreateInput!
-  ): ShippingOptionRequirement
-  createShippingOptionRequirements(
-    data: [ShippingOptionRequirementCreateInput!]!
-  ): [ShippingOptionRequirement]
-  updateShippingOptionRequirement(
-    where: ShippingOptionRequirementWhereUniqueInput!
-    data: ShippingOptionRequirementUpdateInput!
-  ): ShippingOptionRequirement
-  updateShippingOptionRequirements(
-    data: [ShippingOptionRequirementUpdateArgs!]!
-  ): [ShippingOptionRequirement]
-  deleteShippingOptionRequirement(
-    where: ShippingOptionRequirementWhereUniqueInput!
-  ): ShippingOptionRequirement
-  deleteShippingOptionRequirements(
-    where: [ShippingOptionRequirementWhereUniqueInput!]!
-  ): [ShippingOptionRequirement]
+  deleteShippingOptions(where: [ShippingOptionWhereUniqueInput!]!): [ShippingOption]
+  createShippingOptionRequirement(data: ShippingOptionRequirementCreateInput!): ShippingOptionRequirement
+  createShippingOptionRequirements(data: [ShippingOptionRequirementCreateInput!]!): [ShippingOptionRequirement]
+  updateShippingOptionRequirement(where: ShippingOptionRequirementWhereUniqueInput!, data: ShippingOptionRequirementUpdateInput!): ShippingOptionRequirement
+  updateShippingOptionRequirements(data: [ShippingOptionRequirementUpdateArgs!]!): [ShippingOptionRequirement]
+  deleteShippingOptionRequirement(where: ShippingOptionRequirementWhereUniqueInput!): ShippingOptionRequirement
+  deleteShippingOptionRequirements(where: [ShippingOptionRequirementWhereUniqueInput!]!): [ShippingOptionRequirement]
   createShippingProfile(data: ShippingProfileCreateInput!): ShippingProfile
-  createShippingProfiles(
-    data: [ShippingProfileCreateInput!]!
-  ): [ShippingProfile]
-  updateShippingProfile(
-    where: ShippingProfileWhereUniqueInput!
-    data: ShippingProfileUpdateInput!
-  ): ShippingProfile
+  createShippingProfiles(data: [ShippingProfileCreateInput!]!): [ShippingProfile]
+  updateShippingProfile(where: ShippingProfileWhereUniqueInput!, data: ShippingProfileUpdateInput!): ShippingProfile
   updateShippingProfiles(data: [ShippingProfileUpdateArgs!]!): [ShippingProfile]
-  deleteShippingProfile(
-    where: ShippingProfileWhereUniqueInput!
-  ): ShippingProfile
-  deleteShippingProfiles(
-    where: [ShippingProfileWhereUniqueInput!]!
-  ): [ShippingProfile]
+  deleteShippingProfile(where: ShippingProfileWhereUniqueInput!): ShippingProfile
+  deleteShippingProfiles(where: [ShippingProfileWhereUniqueInput!]!): [ShippingProfile]
   createStore(data: StoreCreateInput!): Store
   createStores(data: [StoreCreateInput!]!): [Store]
   updateStore(where: StoreWhereUniqueInput!, data: StoreUpdateInput!): Store
@@ -7933,50 +7077,30 @@ type Mutation {
   deleteSwaps(where: [SwapWhereUniqueInput!]!): [Swap]
   createTaxProvider(data: TaxProviderCreateInput!): TaxProvider
   createTaxProviders(data: [TaxProviderCreateInput!]!): [TaxProvider]
-  updateTaxProvider(
-    where: TaxProviderWhereUniqueInput!
-    data: TaxProviderUpdateInput!
-  ): TaxProvider
+  updateTaxProvider(where: TaxProviderWhereUniqueInput!, data: TaxProviderUpdateInput!): TaxProvider
   updateTaxProviders(data: [TaxProviderUpdateArgs!]!): [TaxProvider]
   deleteTaxProvider(where: TaxProviderWhereUniqueInput!): TaxProvider
   deleteTaxProviders(where: [TaxProviderWhereUniqueInput!]!): [TaxProvider]
   createTaxRate(data: TaxRateCreateInput!): TaxRate
   createTaxRates(data: [TaxRateCreateInput!]!): [TaxRate]
-  updateTaxRate(
-    where: TaxRateWhereUniqueInput!
-    data: TaxRateUpdateInput!
-  ): TaxRate
+  updateTaxRate(where: TaxRateWhereUniqueInput!, data: TaxRateUpdateInput!): TaxRate
   updateTaxRates(data: [TaxRateUpdateArgs!]!): [TaxRate]
   deleteTaxRate(where: TaxRateWhereUniqueInput!): TaxRate
   deleteTaxRates(where: [TaxRateWhereUniqueInput!]!): [TaxRate]
   createTrackingLink(data: TrackingLinkCreateInput!): TrackingLink
   createTrackingLinks(data: [TrackingLinkCreateInput!]!): [TrackingLink]
-  updateTrackingLink(
-    where: TrackingLinkWhereUniqueInput!
-    data: TrackingLinkUpdateInput!
-  ): TrackingLink
+  updateTrackingLink(where: TrackingLinkWhereUniqueInput!, data: TrackingLinkUpdateInput!): TrackingLink
   updateTrackingLinks(data: [TrackingLinkUpdateArgs!]!): [TrackingLink]
   deleteTrackingLink(where: TrackingLinkWhereUniqueInput!): TrackingLink
   deleteTrackingLinks(where: [TrackingLinkWhereUniqueInput!]!): [TrackingLink]
   endSession: Boolean!
-  authenticateUserWithPassword(
-    email: String!
-    password: String!
-  ): UserAuthenticationWithPasswordResult
-  createInitialUser(
-    data: CreateInitialUserInput!
-  ): UserAuthenticationWithPasswordSuccess!
+  authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
+  createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
   sendUserPasswordResetLink(email: String!): Boolean!
-  redeemUserPasswordResetToken(
-    email: String!
-    token: String!
-    password: String!
-  ): RedeemUserPasswordResetTokenResult
+  redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
 }
 
-union UserAuthenticationWithPasswordResult =
-    UserAuthenticationWithPasswordSuccess
-  | UserAuthenticationWithPasswordFailure
+union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
 
 type UserAuthenticationWithPasswordSuccess {
   sessionToken: String!
@@ -8005,522 +7129,192 @@ enum PasswordResetRedemptionErrorCode {
 }
 
 type Query {
-  users(
-    where: UserWhereInput! = {}
-    orderBy: [UserOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [User!]
+  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
-  roles(
-    where: RoleWhereInput! = {}
-    orderBy: [RoleOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Role!]
+  roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0): [Role!]
   role(where: RoleWhereUniqueInput!): Role
   rolesCount(where: RoleWhereInput! = {}): Int
-  orders(
-    where: OrderWhereInput! = {}
-    orderBy: [OrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Order!]
+  orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [Order!]
   order(where: OrderWhereUniqueInput!): Order
   ordersCount(where: OrderWhereInput! = {}): Int
-  lineItems(
-    where: LineItemWhereInput! = {}
-    orderBy: [LineItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItem!]
+  lineItems(where: LineItemWhereInput! = {}, orderBy: [LineItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItem!]
   lineItem(where: LineItemWhereUniqueInput!): LineItem
   lineItemsCount(where: LineItemWhereInput! = {}): Int
-  products(
-    where: ProductWhereInput! = {}
-    orderBy: [ProductOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Product!]
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   product(where: ProductWhereUniqueInput!): Product
   productsCount(where: ProductWhereInput! = {}): Int
-  productCollections(
-    where: ProductCollectionWhereInput! = {}
-    orderBy: [ProductCollectionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductCollection!]
-  productCollection(
-    where: ProductCollectionWhereUniqueInput!
-  ): ProductCollection
+  productCollections(where: ProductCollectionWhereInput! = {}, orderBy: [ProductCollectionOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductCollection!]
+  productCollection(where: ProductCollectionWhereUniqueInput!): ProductCollection
   productCollectionsCount(where: ProductCollectionWhereInput! = {}): Int
-  productImages(
-    where: ProductImageWhereInput! = {}
-    orderBy: [ProductImageOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductImage!]
+  productImages(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductImage!]
   productImage(where: ProductImageWhereUniqueInput!): ProductImage
   productImagesCount(where: ProductImageWhereInput! = {}): Int
-  productOptions(
-    where: ProductOptionWhereInput! = {}
-    orderBy: [ProductOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductOption!]
+  productOptions(where: ProductOptionWhereInput! = {}, orderBy: [ProductOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductOption!]
   productOption(where: ProductOptionWhereUniqueInput!): ProductOption
   productOptionsCount(where: ProductOptionWhereInput! = {}): Int
-  productOptionValues(
-    where: ProductOptionValueWhereInput! = {}
-    orderBy: [ProductOptionValueOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductOptionValue!]
-  productOptionValue(
-    where: ProductOptionValueWhereUniqueInput!
-  ): ProductOptionValue
+  productOptionValues(where: ProductOptionValueWhereInput! = {}, orderBy: [ProductOptionValueOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductOptionValue!]
+  productOptionValue(where: ProductOptionValueWhereUniqueInput!): ProductOptionValue
   productOptionValuesCount(where: ProductOptionValueWhereInput! = {}): Int
-  productTags(
-    where: ProductTagWhereInput! = {}
-    orderBy: [ProductTagOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductTag!]
+  productTags(where: ProductTagWhereInput! = {}, orderBy: [ProductTagOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductTag!]
   productTag(where: ProductTagWhereUniqueInput!): ProductTag
   productTagsCount(where: ProductTagWhereInput! = {}): Int
-  productTypes(
-    where: ProductTypeWhereInput! = {}
-    orderBy: [ProductTypeOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductType!]
+  productTypes(where: ProductTypeWhereInput! = {}, orderBy: [ProductTypeOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductType!]
   productType(where: ProductTypeWhereUniqueInput!): ProductType
   productTypesCount(where: ProductTypeWhereInput! = {}): Int
-  productVariants(
-    where: ProductVariantWhereInput! = {}
-    orderBy: [ProductVariantOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProductVariant!]
+  productVariants(where: ProductVariantWhereInput! = {}, orderBy: [ProductVariantOrderByInput!]! = [], take: Int, skip: Int! = 0): [ProductVariant!]
   productVariant(where: ProductVariantWhereUniqueInput!): ProductVariant
   productVariantsCount(where: ProductVariantWhereInput! = {}): Int
-  payments(
-    where: PaymentWhereInput! = {}
-    orderBy: [PaymentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Payment!]
+  payments(where: PaymentWhereInput! = {}, orderBy: [PaymentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Payment!]
   payment(where: PaymentWhereUniqueInput!): Payment
   paymentsCount(where: PaymentWhereInput! = {}): Int
-  addresses(
-    where: AddressWhereInput! = {}
-    orderBy: [AddressOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Address!]
+  addresses(where: AddressWhereInput! = {}, orderBy: [AddressOrderByInput!]! = [], take: Int, skip: Int! = 0): [Address!]
   address(where: AddressWhereUniqueInput!): Address
   addressesCount(where: AddressWhereInput! = {}): Int
-  carts(
-    where: CartWhereInput! = {}
-    orderBy: [CartOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Cart!]
+  carts(where: CartWhereInput! = {}, orderBy: [CartOrderByInput!]! = [], take: Int, skip: Int! = 0): [Cart!]
   cart(where: CartWhereUniqueInput!): Cart
   cartsCount(where: CartWhereInput! = {}): Int
-  apiKeys(
-    where: ApiKeyWhereInput! = {}
-    orderBy: [ApiKeyOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ApiKey!]
+  apiKeys(where: ApiKeyWhereInput! = {}, orderBy: [ApiKeyOrderByInput!]! = [], take: Int, skip: Int! = 0): [ApiKey!]
   apiKey(where: ApiKeyWhereUniqueInput!): ApiKey
   apiKeysCount(where: ApiKeyWhereInput! = {}): Int
-  claimOrders(
-    where: ClaimOrderWhereInput! = {}
-    orderBy: [ClaimOrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimOrder!]
+  claimOrders(where: ClaimOrderWhereInput! = {}, orderBy: [ClaimOrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimOrder!]
   claimOrder(where: ClaimOrderWhereUniqueInput!): ClaimOrder
   claimOrdersCount(where: ClaimOrderWhereInput! = {}): Int
-  claimItems(
-    where: ClaimItemWhereInput! = {}
-    orderBy: [ClaimItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimItem!]
+  claimItems(where: ClaimItemWhereInput! = {}, orderBy: [ClaimItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimItem!]
   claimItem(where: ClaimItemWhereUniqueInput!): ClaimItem
   claimItemsCount(where: ClaimItemWhereInput! = {}): Int
-  claimImages(
-    where: ClaimImageWhereInput! = {}
-    orderBy: [ClaimImageOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimImage!]
+  claimImages(where: ClaimImageWhereInput! = {}, orderBy: [ClaimImageOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimImage!]
   claimImage(where: ClaimImageWhereUniqueInput!): ClaimImage
   claimImagesCount(where: ClaimImageWhereInput! = {}): Int
-  claimTags(
-    where: ClaimTagWhereInput! = {}
-    orderBy: [ClaimTagOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ClaimTag!]
+  claimTags(where: ClaimTagWhereInput! = {}, orderBy: [ClaimTagOrderByInput!]! = [], take: Int, skip: Int! = 0): [ClaimTag!]
   claimTag(where: ClaimTagWhereUniqueInput!): ClaimTag
   claimTagsCount(where: ClaimTagWhereInput! = {}): Int
-  countries(
-    where: CountryWhereInput! = {}
-    orderBy: [CountryOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Country!]
+  countries(where: CountryWhereInput! = {}, orderBy: [CountryOrderByInput!]! = [], take: Int, skip: Int! = 0): [Country!]
   country(where: CountryWhereUniqueInput!): Country
   countriesCount(where: CountryWhereInput! = {}): Int
-  currencies(
-    where: CurrencyWhereInput! = {}
-    orderBy: [CurrencyOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Currency!]
+  currencies(where: CurrencyWhereInput! = {}, orderBy: [CurrencyOrderByInput!]! = [], take: Int, skip: Int! = 0): [Currency!]
   currency(where: CurrencyWhereUniqueInput!): Currency
   currenciesCount(where: CurrencyWhereInput! = {}): Int
-  customers(
-    where: CustomerWhereInput! = {}
-    orderBy: [CustomerOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Customer!]
+  customers(where: CustomerWhereInput! = {}, orderBy: [CustomerOrderByInput!]! = [], take: Int, skip: Int! = 0): [Customer!]
   customer(where: CustomerWhereUniqueInput!): Customer
   customersCount(where: CustomerWhereInput! = {}): Int
-  customerGroups(
-    where: CustomerGroupWhereInput! = {}
-    orderBy: [CustomerGroupOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [CustomerGroup!]
+  customerGroups(where: CustomerGroupWhereInput! = {}, orderBy: [CustomerGroupOrderByInput!]! = [], take: Int, skip: Int! = 0): [CustomerGroup!]
   customerGroup(where: CustomerGroupWhereUniqueInput!): CustomerGroup
   customerGroupsCount(where: CustomerGroupWhereInput! = {}): Int
-  customShippingOptions(
-    where: CustomShippingOptionWhereInput! = {}
-    orderBy: [CustomShippingOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [CustomShippingOption!]
-  customShippingOption(
-    where: CustomShippingOptionWhereUniqueInput!
-  ): CustomShippingOption
+  customShippingOptions(where: CustomShippingOptionWhereInput! = {}, orderBy: [CustomShippingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [CustomShippingOption!]
+  customShippingOption(where: CustomShippingOptionWhereUniqueInput!): CustomShippingOption
   customShippingOptionsCount(where: CustomShippingOptionWhereInput! = {}): Int
-  discounts(
-    where: DiscountWhereInput! = {}
-    orderBy: [DiscountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Discount!]
+  discounts(where: DiscountWhereInput! = {}, orderBy: [DiscountOrderByInput!]! = [], take: Int, skip: Int! = 0): [Discount!]
   discount(where: DiscountWhereUniqueInput!): Discount
   discountsCount(where: DiscountWhereInput! = {}): Int
-  discountConditions(
-    where: DiscountConditionWhereInput! = {}
-    orderBy: [DiscountConditionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DiscountCondition!]
-  discountCondition(
-    where: DiscountConditionWhereUniqueInput!
-  ): DiscountCondition
+  discountConditions(where: DiscountConditionWhereInput! = {}, orderBy: [DiscountConditionOrderByInput!]! = [], take: Int, skip: Int! = 0): [DiscountCondition!]
+  discountCondition(where: DiscountConditionWhereUniqueInput!): DiscountCondition
   discountConditionsCount(where: DiscountConditionWhereInput! = {}): Int
-  discountRules(
-    where: DiscountRuleWhereInput! = {}
-    orderBy: [DiscountRuleOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DiscountRule!]
+  discountRules(where: DiscountRuleWhereInput! = {}, orderBy: [DiscountRuleOrderByInput!]! = [], take: Int, skip: Int! = 0): [DiscountRule!]
   discountRule(where: DiscountRuleWhereUniqueInput!): DiscountRule
   discountRulesCount(where: DiscountRuleWhereInput! = {}): Int
-  draftOrders(
-    where: DraftOrderWhereInput! = {}
-    orderBy: [DraftOrderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [DraftOrder!]
+  draftOrders(where: DraftOrderWhereInput! = {}, orderBy: [DraftOrderOrderByInput!]! = [], take: Int, skip: Int! = 0): [DraftOrder!]
   draftOrder(where: DraftOrderWhereUniqueInput!): DraftOrder
   draftOrdersCount(where: DraftOrderWhereInput! = {}): Int
-  fulfillments(
-    where: FulfillmentWhereInput! = {}
-    orderBy: [FulfillmentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Fulfillment!]
+  fulfillments(where: FulfillmentWhereInput! = {}, orderBy: [FulfillmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Fulfillment!]
   fulfillment(where: FulfillmentWhereUniqueInput!): Fulfillment
   fulfillmentsCount(where: FulfillmentWhereInput! = {}): Int
-  fulfillmentItems(
-    where: FulfillmentItemWhereInput! = {}
-    orderBy: [FulfillmentItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [FulfillmentItem!]
+  fulfillmentItems(where: FulfillmentItemWhereInput! = {}, orderBy: [FulfillmentItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [FulfillmentItem!]
   fulfillmentItem(where: FulfillmentItemWhereUniqueInput!): FulfillmentItem
   fulfillmentItemsCount(where: FulfillmentItemWhereInput! = {}): Int
-  fulfillmentProviders(
-    where: FulfillmentProviderWhereInput! = {}
-    orderBy: [FulfillmentProviderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [FulfillmentProvider!]
-  fulfillmentProvider(
-    where: FulfillmentProviderWhereUniqueInput!
-  ): FulfillmentProvider
+  fulfillmentProviders(where: FulfillmentProviderWhereInput! = {}, orderBy: [FulfillmentProviderOrderByInput!]! = [], take: Int, skip: Int! = 0): [FulfillmentProvider!]
+  fulfillmentProvider(where: FulfillmentProviderWhereUniqueInput!): FulfillmentProvider
   fulfillmentProvidersCount(where: FulfillmentProviderWhereInput! = {}): Int
-  giftCards(
-    where: GiftCardWhereInput! = {}
-    orderBy: [GiftCardOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [GiftCard!]
+  giftCards(where: GiftCardWhereInput! = {}, orderBy: [GiftCardOrderByInput!]! = [], take: Int, skip: Int! = 0): [GiftCard!]
   giftCard(where: GiftCardWhereUniqueInput!): GiftCard
   giftCardsCount(where: GiftCardWhereInput! = {}): Int
-  giftCardTransactions(
-    where: GiftCardTransactionWhereInput! = {}
-    orderBy: [GiftCardTransactionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [GiftCardTransaction!]
-  giftCardTransaction(
-    where: GiftCardTransactionWhereUniqueInput!
-  ): GiftCardTransaction
+  giftCardTransactions(where: GiftCardTransactionWhereInput! = {}, orderBy: [GiftCardTransactionOrderByInput!]! = [], take: Int, skip: Int! = 0): [GiftCardTransaction!]
+  giftCardTransaction(where: GiftCardTransactionWhereUniqueInput!): GiftCardTransaction
   giftCardTransactionsCount(where: GiftCardTransactionWhereInput! = {}): Int
-  idempotencyKeys(
-    where: IdempotencyKeyWhereInput! = {}
-    orderBy: [IdempotencyKeyOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [IdempotencyKey!]
+  idempotencyKeys(where: IdempotencyKeyWhereInput! = {}, orderBy: [IdempotencyKeyOrderByInput!]! = [], take: Int, skip: Int! = 0): [IdempotencyKey!]
   idempotencyKey(where: IdempotencyKeyWhereUniqueInput!): IdempotencyKey
   idempotencyKeysCount(where: IdempotencyKeyWhereInput! = {}): Int
-  invites(
-    where: InviteWhereInput! = {}
-    orderBy: [InviteOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Invite!]
+  invites(where: InviteWhereInput! = {}, orderBy: [InviteOrderByInput!]! = [], take: Int, skip: Int! = 0): [Invite!]
   invite(where: InviteWhereUniqueInput!): Invite
   invitesCount(where: InviteWhereInput! = {}): Int
-  lineItemAdjustments(
-    where: LineItemAdjustmentWhereInput! = {}
-    orderBy: [LineItemAdjustmentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItemAdjustment!]
-  lineItemAdjustment(
-    where: LineItemAdjustmentWhereUniqueInput!
-  ): LineItemAdjustment
+  lineItemAdjustments(where: LineItemAdjustmentWhereInput! = {}, orderBy: [LineItemAdjustmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItemAdjustment!]
+  lineItemAdjustment(where: LineItemAdjustmentWhereUniqueInput!): LineItemAdjustment
   lineItemAdjustmentsCount(where: LineItemAdjustmentWhereInput! = {}): Int
-  lineItemTaxLines(
-    where: LineItemTaxLineWhereInput! = {}
-    orderBy: [LineItemTaxLineOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [LineItemTaxLine!]
+  lineItemTaxLines(where: LineItemTaxLineWhereInput! = {}, orderBy: [LineItemTaxLineOrderByInput!]! = [], take: Int, skip: Int! = 0): [LineItemTaxLine!]
   lineItemTaxLine(where: LineItemTaxLineWhereUniqueInput!): LineItemTaxLine
   lineItemTaxLinesCount(where: LineItemTaxLineWhereInput! = {}): Int
-  moneyAmounts(
-    where: MoneyAmountWhereInput! = {}
-    orderBy: [MoneyAmountOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [MoneyAmount!]
+  moneyAmounts(where: MoneyAmountWhereInput! = {}, orderBy: [MoneyAmountOrderByInput!]! = [], take: Int, skip: Int! = 0): [MoneyAmount!]
   moneyAmount(where: MoneyAmountWhereUniqueInput!): MoneyAmount
   moneyAmountsCount(where: MoneyAmountWhereInput! = {}): Int
-  notes(
-    where: NoteWhereInput! = {}
-    orderBy: [NoteOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Note!]
+  notes(where: NoteWhereInput! = {}, orderBy: [NoteOrderByInput!]! = [], take: Int, skip: Int! = 0): [Note!]
   note(where: NoteWhereUniqueInput!): Note
   notesCount(where: NoteWhereInput! = {}): Int
-  notifications(
-    where: NotificationWhereInput! = {}
-    orderBy: [NotificationOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Notification!]
+  notifications(where: NotificationWhereInput! = {}, orderBy: [NotificationOrderByInput!]! = [], take: Int, skip: Int! = 0): [Notification!]
   notification(where: NotificationWhereUniqueInput!): Notification
   notificationsCount(where: NotificationWhereInput! = {}): Int
-  notificationProviders(
-    where: NotificationProviderWhereInput! = {}
-    orderBy: [NotificationProviderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [NotificationProvider!]
-  notificationProvider(
-    where: NotificationProviderWhereUniqueInput!
-  ): NotificationProvider
+  notificationProviders(where: NotificationProviderWhereInput! = {}, orderBy: [NotificationProviderOrderByInput!]! = [], take: Int, skip: Int! = 0): [NotificationProvider!]
+  notificationProvider(where: NotificationProviderWhereUniqueInput!): NotificationProvider
   notificationProvidersCount(where: NotificationProviderWhereInput! = {}): Int
-  oAuths(
-    where: OAuthWhereInput! = {}
-    orderBy: [OAuthOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [OAuth!]
+  oAuths(where: OAuthWhereInput! = {}, orderBy: [OAuthOrderByInput!]! = [], take: Int, skip: Int! = 0): [OAuth!]
   oAuth(where: OAuthWhereUniqueInput!): OAuth
   oAuthsCount(where: OAuthWhereInput! = {}): Int
-  paymentProviders(
-    where: PaymentProviderWhereInput! = {}
-    orderBy: [PaymentProviderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [PaymentProvider!]
+  paymentProviders(where: PaymentProviderWhereInput! = {}, orderBy: [PaymentProviderOrderByInput!]! = [], take: Int, skip: Int! = 0): [PaymentProvider!]
   paymentProvider(where: PaymentProviderWhereUniqueInput!): PaymentProvider
   paymentProvidersCount(where: PaymentProviderWhereInput! = {}): Int
-  paymentSessions(
-    where: PaymentSessionWhereInput! = {}
-    orderBy: [PaymentSessionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [PaymentSession!]
+  paymentSessions(where: PaymentSessionWhereInput! = {}, orderBy: [PaymentSessionOrderByInput!]! = [], take: Int, skip: Int! = 0): [PaymentSession!]
   paymentSession(where: PaymentSessionWhereUniqueInput!): PaymentSession
   paymentSessionsCount(where: PaymentSessionWhereInput! = {}): Int
-  priceLists(
-    where: PriceListWhereInput! = {}
-    orderBy: [PriceListOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [PriceList!]
+  priceLists(where: PriceListWhereInput! = {}, orderBy: [PriceListOrderByInput!]! = [], take: Int, skip: Int! = 0): [PriceList!]
   priceList(where: PriceListWhereUniqueInput!): PriceList
   priceListsCount(where: PriceListWhereInput! = {}): Int
-  refunds(
-    where: RefundWhereInput! = {}
-    orderBy: [RefundOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Refund!]
+  refunds(where: RefundWhereInput! = {}, orderBy: [RefundOrderByInput!]! = [], take: Int, skip: Int! = 0): [Refund!]
   refund(where: RefundWhereUniqueInput!): Refund
   refundsCount(where: RefundWhereInput! = {}): Int
-  regions(
-    where: RegionWhereInput! = {}
-    orderBy: [RegionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Region!]
+  regions(where: RegionWhereInput! = {}, orderBy: [RegionOrderByInput!]! = [], take: Int, skip: Int! = 0): [Region!]
   region(where: RegionWhereUniqueInput!): Region
   regionsCount(where: RegionWhereInput! = {}): Int
-  returns(
-    where: ReturnWhereInput! = {}
-    orderBy: [ReturnOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Return!]
+  returns(where: ReturnWhereInput! = {}, orderBy: [ReturnOrderByInput!]! = [], take: Int, skip: Int! = 0): [Return!]
   return(where: ReturnWhereUniqueInput!): Return
   returnsCount(where: ReturnWhereInput! = {}): Int
-  returnItems(
-    where: ReturnItemWhereInput! = {}
-    orderBy: [ReturnItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ReturnItem!]
+  returnItems(where: ReturnItemWhereInput! = {}, orderBy: [ReturnItemOrderByInput!]! = [], take: Int, skip: Int! = 0): [ReturnItem!]
   returnItem(where: ReturnItemWhereUniqueInput!): ReturnItem
   returnItemsCount(where: ReturnItemWhereInput! = {}): Int
-  returnReasons(
-    where: ReturnReasonWhereInput! = {}
-    orderBy: [ReturnReasonOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ReturnReason!]
+  returnReasons(where: ReturnReasonWhereInput! = {}, orderBy: [ReturnReasonOrderByInput!]! = [], take: Int, skip: Int! = 0): [ReturnReason!]
   returnReason(where: ReturnReasonWhereUniqueInput!): ReturnReason
   returnReasonsCount(where: ReturnReasonWhereInput! = {}): Int
-  shippingMethods(
-    where: ShippingMethodWhereInput! = {}
-    orderBy: [ShippingMethodOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingMethod!]
+  shippingMethods(where: ShippingMethodWhereInput! = {}, orderBy: [ShippingMethodOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingMethod!]
   shippingMethod(where: ShippingMethodWhereUniqueInput!): ShippingMethod
   shippingMethodsCount(where: ShippingMethodWhereInput! = {}): Int
-  shippingMethodTaxLines(
-    where: ShippingMethodTaxLineWhereInput! = {}
-    orderBy: [ShippingMethodTaxLineOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingMethodTaxLine!]
-  shippingMethodTaxLine(
-    where: ShippingMethodTaxLineWhereUniqueInput!
-  ): ShippingMethodTaxLine
+  shippingMethodTaxLines(where: ShippingMethodTaxLineWhereInput! = {}, orderBy: [ShippingMethodTaxLineOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingMethodTaxLine!]
+  shippingMethodTaxLine(where: ShippingMethodTaxLineWhereUniqueInput!): ShippingMethodTaxLine
   shippingMethodTaxLinesCount(where: ShippingMethodTaxLineWhereInput! = {}): Int
-  shippingOptions(
-    where: ShippingOptionWhereInput! = {}
-    orderBy: [ShippingOptionOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingOption!]
+  shippingOptions(where: ShippingOptionWhereInput! = {}, orderBy: [ShippingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingOption!]
   shippingOption(where: ShippingOptionWhereUniqueInput!): ShippingOption
   shippingOptionsCount(where: ShippingOptionWhereInput! = {}): Int
-  shippingOptionRequirements(
-    where: ShippingOptionRequirementWhereInput! = {}
-    orderBy: [ShippingOptionRequirementOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingOptionRequirement!]
-  shippingOptionRequirement(
-    where: ShippingOptionRequirementWhereUniqueInput!
-  ): ShippingOptionRequirement
-  shippingOptionRequirementsCount(
-    where: ShippingOptionRequirementWhereInput! = {}
-  ): Int
-  shippingProfiles(
-    where: ShippingProfileWhereInput! = {}
-    orderBy: [ShippingProfileOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ShippingProfile!]
+  shippingOptionRequirements(where: ShippingOptionRequirementWhereInput! = {}, orderBy: [ShippingOptionRequirementOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingOptionRequirement!]
+  shippingOptionRequirement(where: ShippingOptionRequirementWhereUniqueInput!): ShippingOptionRequirement
+  shippingOptionRequirementsCount(where: ShippingOptionRequirementWhereInput! = {}): Int
+  shippingProfiles(where: ShippingProfileWhereInput! = {}, orderBy: [ShippingProfileOrderByInput!]! = [], take: Int, skip: Int! = 0): [ShippingProfile!]
   shippingProfile(where: ShippingProfileWhereUniqueInput!): ShippingProfile
   shippingProfilesCount(where: ShippingProfileWhereInput! = {}): Int
-  stores(
-    where: StoreWhereInput! = {}
-    orderBy: [StoreOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Store!]
+  stores(where: StoreWhereInput! = {}, orderBy: [StoreOrderByInput!]! = [], take: Int, skip: Int! = 0): [Store!]
   store(where: StoreWhereUniqueInput!): Store
   storesCount(where: StoreWhereInput! = {}): Int
-  swaps(
-    where: SwapWhereInput! = {}
-    orderBy: [SwapOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Swap!]
+  swaps(where: SwapWhereInput! = {}, orderBy: [SwapOrderByInput!]! = [], take: Int, skip: Int! = 0): [Swap!]
   swap(where: SwapWhereUniqueInput!): Swap
   swapsCount(where: SwapWhereInput! = {}): Int
-  taxProviders(
-    where: TaxProviderWhereInput! = {}
-    orderBy: [TaxProviderOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TaxProvider!]
+  taxProviders(where: TaxProviderWhereInput! = {}, orderBy: [TaxProviderOrderByInput!]! = [], take: Int, skip: Int! = 0): [TaxProvider!]
   taxProvider(where: TaxProviderWhereUniqueInput!): TaxProvider
   taxProvidersCount(where: TaxProviderWhereInput! = {}): Int
-  taxRates(
-    where: TaxRateWhereInput! = {}
-    orderBy: [TaxRateOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TaxRate!]
+  taxRates(where: TaxRateWhereInput! = {}, orderBy: [TaxRateOrderByInput!]! = [], take: Int, skip: Int! = 0): [TaxRate!]
   taxRate(where: TaxRateWhereUniqueInput!): TaxRate
   taxRatesCount(where: TaxRateWhereInput! = {}): Int
-  trackingLinks(
-    where: TrackingLinkWhereInput! = {}
-    orderBy: [TrackingLinkOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TrackingLink!]
+  trackingLinks(where: TrackingLinkWhereInput! = {}, orderBy: [TrackingLinkOrderByInput!]! = [], take: Int, skip: Int! = 0): [TrackingLink!]
   trackingLink(where: TrackingLinkWhereUniqueInput!): TrackingLink
   trackingLinksCount(where: TrackingLinkWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
-  validateUserPasswordResetToken(
-    email: String!
-    token: String!
-  ): ValidateUserPasswordResetTokenResult
+  validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult
   redirectToInit: Boolean
 }
 
@@ -8536,8 +7330,6 @@ type KeystoneMeta {
 }
 
 type KeystoneAdminMeta {
-  enableSignout: Boolean!
-  enableSessionItem: Boolean!
   lists: [KeystoneAdminUIListMeta!]!
   list(key: String!): KeystoneAdminUIListMeta
 }
@@ -8557,8 +7349,10 @@ type KeystoneAdminUIListMeta {
   pageSize: Int!
   labelField: String!
   fields: [KeystoneAdminUIFieldMeta!]!
+  groups: [KeystoneAdminUIFieldGroupMeta!]!
   initialSort: KeystoneAdminUISort
   isHidden: Boolean!
+  isSingleton: Boolean!
 }
 
 type KeystoneAdminUIFieldMeta {
@@ -8596,12 +7390,24 @@ enum KeystoneAdminUIFieldMetaListViewFieldMode {
 
 type KeystoneAdminUIFieldMetaItemView {
   fieldMode: KeystoneAdminUIFieldMetaItemViewFieldMode
+  fieldPosition: KeystoneAdminUIFieldMetaItemViewFieldPosition
 }
 
 enum KeystoneAdminUIFieldMetaItemViewFieldMode {
   edit
   read
   hidden
+}
+
+enum KeystoneAdminUIFieldMetaItemViewFieldPosition {
+  form
+  sidebar
+}
+
+type KeystoneAdminUIFieldGroupMeta {
+  label: String!
+  description: String
+  fields: [KeystoneAdminUIFieldMeta!]!
 }
 
 type KeystoneAdminUISort {

@@ -1,9 +1,13 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import { json, text, relationship } from "@keystone-6/core/fields";
 import { trackingFields } from "./trackingFields";
 // import { allOperations, allowAll } from "@keystone-6/core/access";
 
 export const Address = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     company: text(),
     firstName: text(),

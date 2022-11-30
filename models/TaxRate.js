@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import {
   json,
   float,
@@ -8,6 +9,9 @@ import {
 import { trackingFields } from "./trackingFields";
 
 export const TaxRate = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     rate: float(),
     code: text(),
@@ -17,9 +21,6 @@ export const TaxRate = list({
       },
     }),
     metadata: json(),
-    region: relationship({
-      ref: "Region.taxRates",
-    }),
     products: relationship({
       ref: "Product.taxRates",
       many: true,

@@ -1,8 +1,12 @@
 import { list } from "@keystone-6/core";
+import { denyAll } from "@keystone-6/core/access";
 import { integer, text, relationship } from "@keystone-6/core/fields";
 import { trackingFields } from "./trackingFields";
 
 export const Country = list({
+  access: {
+    operation: denyAll,
+  },
   fields: {
     iso2: text({
       isIndexed: "unique",
