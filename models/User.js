@@ -11,20 +11,17 @@ import { permissions, rules } from "../access";
 import { trackingFields } from "./trackingFields";
 
 export const User = list({
-  // access: {
-  //   operation: {
-  //     create: () => true,
-  //     // only people with the permission can delete themselves!
-  //     // You can't delete yourself
-  //     delete: permissions.canManageUsers,
-  //   },
-  //   filter: {
-  //     query: rules.canManageUsers,
-  //     update: rules.canManageUsers,
-  //   },
-  // },
   access: {
-    operation: denyAll,
+    operation: {
+      create: () => true,
+      // only people with the permission can delete themselves!
+      // You can't delete yourself
+      delete: permissions.canManageUsers,
+    },
+    filter: {
+      query: rules.canManageUsers,
+      update: rules.canManageUsers,
+    },
   },
   ui: {
     // hide the backend UI from regular users
