@@ -104,11 +104,5 @@ export default withAuth(
       isAccessAllowed: ({ session }) => !!session,
     },
     session: statelessSessions(sessionConfig),
-    graphql: {
-      playground: true,
-      apolloConfig: {
-        introspection: true,
-      },
-    },
   })
 );
